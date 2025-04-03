@@ -3,20 +3,37 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.6.0",
+    "argon2": "^0.41.1",
+    "axios": "^1.8.2",
+    "cookie": "^1.0.2",
+    "date-fns-tz": "^3.2.0",
+    "ioredis": "^5.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.12.0",
+    "next": "^14.3.0-canary.32",
+    "nookies": "^2.5.2",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.23"
+    "react-redux": "^9.2.0",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@douyinfe/semi-icons": "^2.73.0",
+    "@douyinfe/semi-illustrations": "^2.73.0",
+    "@douyinfe/semi-ui": "^2.74.0",
+    "@types/axios": "^0.14.4",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-dom": "^18",
+    "@types/winston": "^2.4.4",
+    "typescript": "^5"
   }
 }

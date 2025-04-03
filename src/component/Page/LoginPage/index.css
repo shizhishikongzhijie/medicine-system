@@ -1,0 +1,98 @@
+.select-tab-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 64px;
+    position: relative;
+    color: var(--semi-color-text-0);
+    background-color: var(--semi-color-secondary-light-active);
+    cursor: default;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer */
+    user-select: none; /* 标准语法 */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05); /* 放大到1.1倍 */
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.select-tab-item.active {
+    background-color: var(--semi-color-secondary);
+    animation: pulse 0.3s ease-in-out;
+    width: 100px;
+}
+
+body[theme-mode="dark"] .select-tab-container {
+    box-shadow: var(
+            --shadow-elevated-dark,
+            0px 4px 14px 0px rgba(255, 255, 255, 0.1),
+            0px 0px 1px 0px rgba(255, 255, 255, 0.2));
+}
+
+.select-tab-container {
+    box-shadow: var(--shadow-elevated, 0px 4px 14px 0px #0000001a, 0px 0px 1px 0px #0000004d);
+}
+
+.login-bottom .select-tab-container {
+    display: none!important;
+}
+
+@keyframes scaleAndFade {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.99);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.login-bottom {
+    margin-left: 60px;
+    margin-bottom: 150px;
+    animation: scaleAndFade 1s;
+}
+
+.register-mask {
+    position: absolute;
+    z-index: 0;
+    transition: z-index 1s, margin-left 1s, margin-bottom 1s, transform 1s, opacity 1s;
+    border-radius: 8px;
+    box-shadow: var(--shadow-elevated, 0px 4px 14px 0px #0000001a, 0px 0px 1px 0px #0000004d);
+    background: var(--semi-color-bg-0);
+    padding: 48px 56px;
+    margin-bottom: 150px;
+    margin-left: 60px;
+    width: 440px;
+    transform: scale(1.001);
+}
+
+body[theme-mode="dark"] .register-mask {
+    box-shadow: var(
+            --shadow-elevated-dark,
+            0px 4px 14px 0px
+            rgba(255, 255, 255, 0.1),
+            0px 0px 1px 0px
+            rgba(255, 255, 255, 0.2));
+}
+.register-mask.top {
+    margin-bottom: 60px;
+    margin-left: 0;
+    z-index: 2;
+    transform: scale(1);
+}

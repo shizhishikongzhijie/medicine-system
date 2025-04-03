@@ -1,0 +1,16 @@
+.stock-table-header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.stock-table-header__left{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.stock-table-header__right{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

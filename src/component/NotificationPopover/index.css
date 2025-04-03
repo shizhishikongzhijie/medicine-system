@@ -1,0 +1,14 @@
+.message-popover {
+    width: 350px;
+}
+
+.message-popover-content {
+    /* 可换行 */
+    white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    width: auto;
+}

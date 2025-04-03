@@ -1,0 +1,16 @@
+.medicine-table-header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.medicine-table-header__left{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.medicine-table-header__right{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
