@@ -62,7 +62,6 @@ const Login = async (req: NextApiRequest, res: NextApiResponse) => {
         await RedisClientInstance.selectDb(0);
         let tokenVerified: any = jwtService.verifyToken(accessToken);
         logger.info(`User ${id} token is ${tokenVerified || "未知"}`);
-        await RedisClientInstance.set(`online_user:${id}`, {EXP: tokenVerified.exp});
         setCookie({res}, 'AccessToken', accessToken, {
             maxAge: process.env.EXPIRATION_TIME_ACCESS_TOKEN,
             path: '/',
@@ -70,6 +69,9 @@ const Login = async (req: NextApiRequest, res: NextApiResponse) => {
             secure: false, // 根据环境变量决定是否开启安全属性
         })
         const refreshToken = jwtService.generateToken(payload, {expiresIn: '7d'});
+        let rTokenVerified: any = jwtService.verifyToken(refreshToken);
+        logger.info(`User ${id} token is ${rTokenVerified || "未知"}`);
+        await RedisClientInstance.set(`online_user:${id}`, {EXP_A: tokenVerified.exp, EXP_R: rTokenVerified.exp});
         setCookie({res}, 'RefreshToken', refreshToken, {
             maxAge: process.env.EXPIRATION_TIME_REFRESH_TOKEN,
             path: '/',

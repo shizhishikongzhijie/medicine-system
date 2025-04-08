@@ -1,6 +1,5 @@
 'use client'
 import {del, get, patch, post, put} from './index';
-import {Notification} from "@douyinfe/semi-ui";
 
 interface nextAxiosProps {
     map: 'get' | 'put' | 'post' | 'delete' | 'patch',
@@ -9,7 +8,7 @@ interface nextAxiosProps {
     config?: any
 }
 
-export const NextAxios = async ({map, url, data, config}: nextAxiosProps) => {
+export const MiddleAxios = async ({map, url, data, config}: nextAxiosProps) => {
     let AxiosRes: any;
     let AxiosError: any;
     try {
@@ -33,18 +32,8 @@ export const NextAxios = async ({map, url, data, config}: nextAxiosProps) => {
         AxiosError = error;
     }
     AxiosRes = AxiosRes || AxiosError;
-    if (AxiosRes?.code === 302) {
-        Notification.error({
-            content: '验证过期，请重新登录',
-            position: "top",
-        })
-        window.location.href = '/login';
-    }
     if (AxiosRes?.code !== 200 && AxiosRes?.code !== 302 && AxiosRes?.message != 'canceled') {
-        Notification.error({
-            content: AxiosRes.message || AxiosRes.error || '未知错误',
-            position: "top",
-        })
+        console.log(AxiosRes.message || AxiosRes.error || '未知错误')
     }
     return AxiosRes;
 }
