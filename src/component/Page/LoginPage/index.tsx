@@ -64,10 +64,6 @@ const LoginPage = () => {
                     data: values
                 })
                 if (res.code === 200) {
-                    // await NextAxios({
-                    //     map: 'post',
-                    //     url: '/api/log',
-                    // })
                     Notification.success({
                         title: '登录成功',
                         content: '登录成功',
@@ -135,8 +131,8 @@ const LoginPage = () => {
             <div className={styles.main}>
                 <div className={`register-mask ${type == 0 ? 'opacity-0' : ''} ${registerMaskTop ? 'top' : ''}`}
                      style={registerMaskStyles}>
-                    <UserInfoAddition ref={UserInfoAdditionRef} onBack={() => setRegisterMaskTop(false)}
-                                      onComplete={onRegisterComplete}/>
+                    {type == 1 ? <UserInfoAddition ref={UserInfoAdditionRef} onBack={() => setRegisterMaskTop(false)}
+                                                   onComplete={onRegisterComplete}/> : <></>}
                 </div>
                 <div ref={loginRef} className={`${styles.login} ${registerMaskTop ? 'login-bottom' : ''}`}>
                     <div className="select-tab-container" style={selectTabStyle}>

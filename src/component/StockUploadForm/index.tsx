@@ -1,12 +1,17 @@
 'use client'
 import {forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState} from "react";
-import {Form, Modal,  Select, JsonViewer} from "@douyinfe/semi-ui";
+import {Form, JsonViewer, Modal, Notification, Select} from "@douyinfe/semi-ui";
 import {FormApi} from "@douyinfe/semi-ui/lib/es/form";
 import {Medicine} from "@/component/Page/MedicinePage/type";
 import MedicinePopover from "@/component/MedicinePopover";
 import {NextAxios} from "@/tools/axios/NextAxios";
 
-const StockUploadForm = forwardRef((props, ref) => {
+interface StockUploadFormProps {
+    callBack?: () => Promise<void>
+}
+
+const StockUploadForm = forwardRef((props:StockUploadFormProps, ref) => {
+    const {callBack} = props;
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [jsonData, setJsonData] = useState<string>();// json数据
     const [axiosPost, setAxiosPost] = useState<boolean>(true);
@@ -26,31 +31,50 @@ const StockUploadForm = forwardRef((props, ref) => {
 
     const handleOk = () => {
         const values = formApiRef.current?.getValues();
-        values.production_date = values.date[0];
-        values.expiration_date = values.date[1];
+        // 格式化日期
+        values.production_date = values.date[0].toISOString().split('T')[0];
+        values.expiry_date = values.date[1].toISOString().split('T')[0];
         values.medicine_id = JSON.parse(jsonData as string)?.id;
-        // if (axiosPost) {
-        //     axios.post('/api/stock', values).then(res => {
-        //         Notification.success({
-        //             title: '入库成功',
-        //             content: '药品入库成功',
-        //             duration: 3
-        //         });
-        //     })
-        // } else {
-        //     axios.patch('/api/stock', {...values, id: initialValues.current.key}).then(res => {
-        //         Notification.success({
-        //             title: '更新成功',
-        //             content: '药品信息更新成功',
-        //             duration: 3
-        //         });
-        //     })
-        // }
+        if (axiosPost) {
+            const fetchData = async () => {
+                let res = await NextAxios({
+                    map: 'post',
+                    url: '/api/stock',
+                    data: values
+                })
+                if (res.code === 200) {
+                    Notification.success({
+                        title: '入库成功',
+                        content: '药品入库成功',
+                        duration: 3
+                    });
+                }
+            }
+            fetchData()
+        } else {
+            const fetchData = async () => {
+                let res = await NextAxios({
+                    map: 'patch',
+                    url: '/api/stock',
+                    data: {...values, id: initialValues.current.key}
+                })
+                if (res.code === 200) {
+                    Notification.success({
+                        title: '更新成功',
+                        content: '药品信息更新成功',
+                        duration: 3
+                    });
+                }
+            }
+            fetchData()
+        }
         console.log(values)
+        callBack?.();
         setModalVisible(false);
     };
 
     const handleCancel = () => {
+        callBack?.();
         setModalVisible(false);
     };
 
@@ -97,6 +121,7 @@ const StockUploadForm = forwardRef((props, ref) => {
                         searchInfo: searchValue
                     }
                 });
+                res = res.data;
                 if (res.data.length > 0) {
                     setSelectOptionList(res.data.map((item: any) => ({
                         label: <MedicinePopover initialValue={item}>{item.id}-{item.name}</MedicinePopover>,

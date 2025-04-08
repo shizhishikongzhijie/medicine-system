@@ -181,7 +181,7 @@ const StockPage = () => {
 
     return (
         <div>
-            <StockUploadForm ref={StockUploadFormRef}/>
+            <StockUploadForm ref={StockUploadFormRef} callBack={getData}/>
             <div className={'stock-table-header'}>
                 <div className={'stock-table-header__left'}>
                     <Button onClick={() => {

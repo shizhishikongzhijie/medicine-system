@@ -48,11 +48,11 @@ const getStock = async (req: NextApiRequest, res: NextApiResponse) => {
         LIMIT ? OFFSET ?
     `;
     try {
-        const countResult: any[] = await pool.query(queryCount, [`%${searchValue}%`]);
-        const dataResult: any[] = await pool.query(query, [`%${searchValue}%`, pageSizeNum, offset]);
+        const [countResult]: any[] = await pool.query(queryCount, [`%${searchValue}%`]);
+        const [dataResult]: any[] = await pool.query(query, [`%${searchValue}%`, pageSizeNum, offset]);
         return ResponseService.success(res, "查询成功", {
             count: countResult[0].count,
-            data: dataResult[0]
+            data: dataResult
         });
     } catch (error) {
         console.error('Error fetching medicine:', error);
@@ -61,16 +61,16 @@ const getStock = async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 const addStock = async (req: NextApiRequest, res: NextApiResponse) => {
-    const {medicineId, quantity, batchNumber, productionDate, expiryDate, remark} = req.body;
+    const {medicine_id, quantity, batch_number, production_date, expiry_date, remark} = req.body;
 
     // 验证参数有效性
-    if (!medicineId || !quantity || !batchNumber || !productionDate || !expiryDate) {
+    if (!medicine_id || !quantity || !batch_number || !production_date || !expiry_date) {
         return ResponseService.info(res, 400, 'Missing required parameters');
     }
     try {
         const result = await pool.query(
             'INSERT INTO stock_in_records (medicine_id, quantity, batch_number, production_date, expiry_date, remark, stock_in_date) VALUES (?, ?, ?, ?, ?, ?, NOW())',
-            [medicineId, quantity, batchNumber, productionDate, expiryDate, remark]
+            [medicine_id, quantity, batch_number, production_date, expiry_date, remark]
         );
         return ResponseService.success(res,
             'Stock added successfully',

@@ -4,12 +4,15 @@ import {
     IconBell,
     IconFile,
     IconHelpCircle,
-    IconHome, IconInbox, IconSemiLogo,
-    IconSetting, IconUser,
+    IconHome,
+    IconInbox,
+    IconSemiLogo,
+    IconSetting,
+    IconUser,
 } from "@douyinfe/semi-icons";
 import Link from "next/link";
 import React, {useEffect, useRef, useState} from "react";
-import {useRouter, usePathname} from 'next/navigation';
+import {usePathname, useRouter} from 'next/navigation';
 import ThemeButton from "@/component/ThemeButton";
 import {NextAxios} from "@/tools/axios/NextAxios"; // 引入 useRouter 和 usePathname
 import {BreadcrumbMap, LayoutProps, Notification} from "@/component/Layout/type";
@@ -67,7 +70,10 @@ const CustomLayout: React.FC<LayoutProps> = ({children, menus}) => {
     const [selectedKey, setSelectedKey] = useState('Home');
     const [notification, setNotification] = useState<Notification[]>();
     useEffect(() => {
-        console.log("menus: " + JSON.stringify(menus));
+        //console.log("menus: " + JSON.stringify(menus));
+        if (pathname && pathname.startsWith('/login')) {
+            return;
+        }
         //更改菜单（初始化）
         if (menus) {
             setNavItems((prevState) => {
@@ -158,36 +164,38 @@ const CustomLayout: React.FC<LayoutProps> = ({children, menus}) => {
                             医院管理系统
                         </span>
                     </span>
-                    <Nav.Footer>
-                        <ThemeButton/>
-                        <Popover
-                            content={<NotificationPopover dataSource={notification}/>}
-                            position={'bottomRight'}
-                        >
+                    {pathname && pathname.startsWith('/login')
+                        ? (<></>)
+                        : (<Nav.Footer>
+                            <ThemeButton/>
+                            <Popover
+                                content={<NotificationPopover dataSource={notification}/>}
+                                position={'bottomRight'}
+                            >
+                                <Button
+                                    theme="borderless"
+                                    icon={<Badge count={notification?.length}><IconBell size="large"/></Badge>}
+                                    style={{
+                                        color: 'var(--semi-color-text-2)',
+                                        marginRight: '12px',
+                                    }}
+                                />
+                            </Popover>
                             <Button
                                 theme="borderless"
-                                icon={<Badge count={notification?.length}><IconBell size="large"/></Badge>}
+                                icon={<IconHelpCircle size="large"/>}
                                 style={{
                                     color: 'var(--semi-color-text-2)',
                                     marginRight: '12px',
                                 }}
                             />
-                        </Popover>
-                        <Button
-                            theme="borderless"
-                            icon={<IconHelpCircle size="large"/>}
-                            style={{
-                                color: 'var(--semi-color-text-2)',
-                                marginRight: '12px',
-                            }}
-                        />
-                        <Popover content={<Button onClick={logoutHandle}>退出登录</Button>}>
-                            <Avatar color="orange" size="small">
-                                时之世
-                            </Avatar>
-                        </Popover>
+                            <Popover content={<Button onClick={logoutHandle}>退出登录</Button>}>
+                                <Avatar color="orange" size="small">
+                                    时之世
+                                </Avatar>
+                            </Popover>
 
-                    </Nav.Footer>
+                        </Nav.Footer>)}
                 </Nav>
             </Header>
             {pathname && pathname.startsWith('/login')

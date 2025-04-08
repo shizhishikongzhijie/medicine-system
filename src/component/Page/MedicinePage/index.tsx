@@ -1,5 +1,5 @@
 'use client'
-import {Button, Input, Modal, Table, Notification} from "@douyinfe/semi-ui";
+import {Button, Input, Modal, Notification, Table} from "@douyinfe/semi-ui";
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import './index.css'
 import MedicineUploadForm from "@/component/MedicineUploadForm";
@@ -148,7 +148,7 @@ const MedicinePage = () => {
 
     return (
         <>
-            <MedicineUploadForm ref={MedicineUploadFormRef}/>
+            <MedicineUploadForm ref={MedicineUploadFormRef} callBack={getData}/>
             <div className={'medicine-table-header'}>
                 <div className={'medicine-table-header__left'}>
                     <Button onClick={() => {

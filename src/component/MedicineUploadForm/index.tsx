@@ -1,12 +1,16 @@
 'use client'
-import {forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
-import {Form, Modal, Space, Switch, Notification} from "@douyinfe/semi-ui";
+import {forwardRef, useImperativeHandle, useRef, useState} from "react";
+import {Form, Modal, Notification, Space, Switch} from "@douyinfe/semi-ui";
 import {FormApi} from "@douyinfe/semi-ui/lib/es/form";
-import axios from 'axios'
 import {Medicine} from "@/component/Page/MedicinePage/type";
 import {NextAxios} from "@/tools/axios/NextAxios";
 
-const MedicineUploadForm = forwardRef((props, ref) => {
+interface MedicineUploadFormProps {
+    callBack?: () => Promise<void>
+}
+
+const MedicineUploadForm = forwardRef((props:MedicineUploadFormProps, ref) => {
+    const {callBack} = props;
     const [modalVisible, setModalVisible] = useState(false);
     const [checked, setChecked] = useState(true);
     const [axiosPost, setAxiosPost] = useState<boolean>(true);
@@ -63,10 +67,12 @@ const MedicineUploadForm = forwardRef((props, ref) => {
             // })
         }
         console.log(values)
+        callBack?.();
         setModalVisible(false);
     };
 
     const handleCancel = () => {
+        callBack?.();
         setModalVisible(false);
     };
 
