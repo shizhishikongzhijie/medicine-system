@@ -1,6 +1,5 @@
 import type {Metadata} from "next";
 import localFont from "next/font/local";
-import CustomLayout from "@/component/Layout";
 import "@douyinfe/semi-ui/dist/css/semi.min.css" // --turbo需要，否则没样式
 import {ReduxProvider} from "@/store";
 import {cookies} from "next/headers";
@@ -8,7 +7,8 @@ import "./globals.css";
 import jwtService from "@/tools/jwt";
 import pool from "@/db/index.js";
 import logger from "@/tools/logger";
-import {Menus} from "@/component/Layout/type";
+import {Menus} from "@/component/layout/type";
+import {CustomLayout} from "@/component";
 
 // const geistSans = localFont({
 //     src: "./fonts/GeistVF.woff",

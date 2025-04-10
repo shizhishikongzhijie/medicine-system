@@ -1,6 +1,5 @@
 'use client'
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {UserInfo} from "@/component/Page/LoginPage/type";
 import {Medicine} from "@/component/Page/MedicinePage/type";
 import {NextAxios} from "@/tools/axios/NextAxios";
 import {Button, Input, Table, Tag} from "@douyinfe/semi-ui";

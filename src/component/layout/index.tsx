@@ -1,72 +1,21 @@
 'use client'
 import {Avatar, Badge, Breadcrumb, Button, Layout, Nav, Popover} from "@douyinfe/semi-ui";
-import {
-    IconBell,
-    IconFile,
-    IconHelpCircle,
-    IconHome,
-    IconInbox,
-    IconSemiLogo,
-    IconSetting,
-    IconUser,
-} from "@douyinfe/semi-icons";
+import {IconBell, IconHelpCircle, IconSemiLogo,} from "@douyinfe/semi-icons";
 import Link from "next/link";
 import React, {useEffect, useRef, useState} from "react";
 import {usePathname, useRouter} from 'next/navigation';
-import ThemeButton from "@/component/ThemeButton";
 import {NextAxios} from "@/tools/axios/NextAxios"; // 引入 useRouter 和 usePathname
-import {BreadcrumbMap, LayoutProps, Notification} from "@/component/Layout/type";
-import NotificationPopover from "@/component/NotificationPopover";
+import {InitNavItems, LayoutProps, Notification} from "@/component/layout/type";
+import {BREADCRUMB_MAP, INIT_NAV_ITEMS, ROUTER_MAP} from "@/config";
+import {NotificationPopover, ThemeButton} from "@/component";
 
-
-// 定义面包屑路由映射
-const breadcrumbMap: BreadcrumbMap = {
-    '/home': ['首页'],
-    '/medicine/medicine': ['药品管理', '药品列表'],
-    '/medicine/stock': ['药品管理', '入库记录'],
-    '/user': ['首页', '用户管理'],
-    '/notification': ['首页', '通知管理'],
-    '/log': ['首页', '在线用户日志'],
-    '/setting': ['首页', '系统设置'],
-};
-const routerMap = {
-    Home: "/home",
-    Medicine: "/medicine/medicine",
-    Stock: "/medicine/stock",
-    User: "/user",
-    Notification: "/notification",
-    Log: "/log",
-    Setting: "/setting"
-};
-
-const initNavItems: InitNavItems[] = [
-    {itemKey: 'Home', text: '首页', icon: <IconHome size="large"/>},
-    {
-        itemKey: 'MedicineManagement', text: '药品管理', icon: <IconInbox size="large"/>,
-        items: [
-            {itemKey: 'Medicine', text: '药品列表'},
-            {itemKey: 'Stock', text: '入库记录'},
-        ]
-    },
-    {itemKey: 'User', text: '用户管理', icon: <IconUser size="large"/>},
-    {itemKey: 'Notification', text: '通知管理', icon: <IconBell size="large"/>},
-    {itemKey: 'Log', text: '日志管理', icon: <IconFile size="large"/>},
-    {itemKey: 'Setting', text: '系统设置', icon: <IconSetting size="large"/>},
-]
-
-interface InitNavItems {
-    itemKey: string;
-    text: string;
-    icon?: React.ReactNode;
-    items?: InitNavItems[];
-}
 
 const CustomLayout: React.FC<LayoutProps> = ({children, menus}) => {
     const {Header, Footer, Sider, Content} = Layout;
     const router = useRouter();
     const pathname = usePathname(); // 获取当前路径名
     const LinkRef = useRef<string>();
-    const [navItems, setNavItems] = useState<InitNavItems[]>(initNavItems);
+    const [navItems, setNavItems] = useState<InitNavItems[]>(INIT_NAV_ITEMS);
     const [selectedKey, setSelectedKey] = useState('Home');
     const [notification, setNotification] = useState<Notification[]>();
     useEffect(() => {
@@ -112,7 +61,7 @@ const CustomLayout: React.FC<LayoutProps> = ({children, menus}) => {
     }, []);
     useEffect(() => {
         // 设置选中的菜单项基于当前路径
-        for (const [key, value] of Object.entries(routerMap)) {
+        for (const [key, value] of Object.entries(ROUTER_MAP)) {
             if (value === pathname) {
                 setSelectedKey(key);
                 break;
@@ -213,11 +162,11 @@ const CustomLayout: React.FC<LayoutProps> = ({children, menus}) => {
                             }}
                             renderWrapper={({itemElement, isSubNav, isInSubNav, props}) => {
 
-                                if (props.itemKey && props.itemKey in routerMap) {
+                                if (props.itemKey && props.itemKey in ROUTER_MAP) {
                                     return (
                                         <Link
                                             style={{textDecoration: "none"}}
-                                            href={routerMap[props.itemKey as keyof typeof routerMap]}
+                                            href={ROUTER_MAP[props.itemKey as keyof typeof ROUTER_MAP]}
                                         >
                                             {itemElement}
                                         </Link>
@@ -243,7 +192,7 @@ const CustomLayout: React.FC<LayoutProps> = ({children, menus}) => {
                             style={{
                                 marginBottom: '24px',
                             }}
-                            routes={pathname && breadcrumbMap[pathname] ? breadcrumbMap[pathname] : []}
+                            routes={pathname && BREADCRUMB_MAP[pathname] ? BREADCRUMB_MAP[pathname] : []}
                         />
                         <div
                             style={{

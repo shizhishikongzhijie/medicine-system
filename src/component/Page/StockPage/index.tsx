@@ -3,11 +3,10 @@ import {UTCFormat} from "@/tools";
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {Stock} from "@/component/Page/StockPage/type";
 import {Button, Input, Modal, Notification, Table} from "@douyinfe/semi-ui";
-import MedicinePopover from "@/component/MedicinePopover";
 import './index.css'
 import {IconInfoCircle} from "@douyinfe/semi-icons";
-import StockUploadForm from "@/component/StockUploadForm";
 import {NextAxios} from "@/tools/axios/NextAxios";
+import {MedicinePopover, StockUploadForm} from "@/component";
 
 const columns = [
     {
@@ -138,21 +137,6 @@ const StockPage = () => {
         if (!selectedRowKeys || selectedRowKeys.length === 0) {
             return;
         }
-        // axios.delete('/api/stock', {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     data: {
-        //         ids: selectedRowKeys
-        //     }
-        // }).then((res) => {
-        //     console.log(res)
-        //     Notification.success({
-        //         title: '删除成功',
-        //         content: '删除成功',
-        //     });
-        //     getData();
-        // })
         let res = await NextAxios({
             map: 'delete',
             url: '/api/stock',

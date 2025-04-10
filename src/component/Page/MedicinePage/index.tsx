@@ -2,10 +2,10 @@
 import {Button, Input, Modal, Notification, Table} from "@douyinfe/semi-ui";
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import './index.css'
-import MedicineUploadForm from "@/component/MedicineUploadForm";
 import {UTCFormat} from "@/tools";
 import {Medicine} from "@/component/Page/MedicinePage/type";
 import {NextAxios} from "@/tools/axios/NextAxios";
+import {MedicineUploadForm} from "@/component";
 
 const columns = [
     {

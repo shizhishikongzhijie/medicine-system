@@ -3,14 +3,14 @@ import {forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState}
 import {Form, JsonViewer, Modal, Notification, Select} from "@douyinfe/semi-ui";
 import {FormApi} from "@douyinfe/semi-ui/lib/es/form";
 import {Medicine} from "@/component/Page/MedicinePage/type";
-import MedicinePopover from "@/component/MedicinePopover";
 import {NextAxios} from "@/tools/axios/NextAxios";
+import {MedicinePopover} from "@/component";
 
 interface StockUploadFormProps {
     callBack?: () => Promise<void>
 }
 
-const StockUploadForm = forwardRef((props:StockUploadFormProps, ref) => {
+const StockUploadForm = forwardRef((props: StockUploadFormProps, ref) => {
     const {callBack} = props;
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [jsonData, setJsonData] = useState<string>();// json数据
@@ -61,7 +61,7 @@ const StockUploadForm = forwardRef((props:StockUploadFormProps, ref) => {
                 if (res.code === 200) {
                     Notification.success({
                         title: '更新成功',
-                        content: '药品信息更新成功',
+                        content: '入库信息更新成功',
                         duration: 3
                     });
                 }
@@ -192,7 +192,7 @@ const StockUploadForm = forwardRef((props:StockUploadFormProps, ref) => {
                 <Form.DatePicker field={'date'} label={'有效期'} type="dateRange" density="compact"
                                  placeholder={['生产日期', '有效期日期']}
                                  style={{width: 260}}/>
-                <Form.TextArea field={'description'} label={'备注'}/>
+                <Form.TextArea field={'remark'} label={'备注'}/>
             </Form>
         </Modal>
     );

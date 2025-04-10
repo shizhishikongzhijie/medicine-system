@@ -1,7 +1,7 @@
 import {forwardRef, useEffect, useImperativeHandle, useState} from "react";
 import {Button, Cascader, Input} from "@douyinfe/semi-ui";
 import {CascaderData} from "@douyinfe/semi-ui/lib/es/cascader";
-import {Districts, User} from "@/component/UserInfoAddition/type";
+import {Districts, User} from "@/component/userInfoAddition/type";
 import {IconChevronRightStroked} from "@douyinfe/semi-icons";
 import './index.css'
 import {NextAxios} from "@/tools/axios/NextAxios";

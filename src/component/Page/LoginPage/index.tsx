@@ -4,10 +4,10 @@ import styles from './index.module.css'
 import {CSSProperties, useEffect, useMemo, useRef, useState} from "react";
 import './index.css'
 import {FormApi} from "@douyinfe/semi-ui/lib/es/form";
-import UserInfoAddition from "@/component/UserInfoAddition";
 import {User} from "@/component/Page/LoginPage/type";
 import {NextAxios} from "@/tools/axios/NextAxios";
 import {useRouter} from "next/navigation";
+import {UserInfoAddition} from "@/component";
 
 const LoginPage = () => {
     const loginRef = useRef<HTMLDivElement>(null)

@@ -1,3 +1,5 @@
+import React from "react";
+
 interface Notification {
     id: number;
     title: string;
@@ -22,4 +24,11 @@ interface Menus {
     url: string;
     parentId: number;
 }
-export type {Notification, BreadcrumbMap, LayoutProps, Menus}
+interface InitNavItems {
+    itemKey: string;
+    text: string;
+    icon?: React.ReactNode;
+    items?: InitNavItems[];
+}
+
+export type {Notification, BreadcrumbMap, LayoutProps, Menus,InitNavItems}
