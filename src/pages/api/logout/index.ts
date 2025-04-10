@@ -1,5 +1,6 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 import {destroyCookie} from "nookies";
+
 import logger from "@/tools/logger";
 import ResponseService from "@/tools/res";
 

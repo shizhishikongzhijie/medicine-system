@@ -6,7 +6,8 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.0",
@@ -28,12 +29,18 @@
     "@douyinfe/semi-icons": "^2.73.0",
     "@douyinfe/semi-illustrations": "^2.73.0",
     "@douyinfe/semi-ui": "^2.74.0",
+    "@eslint/eslintrc": "^3.3.1",
     "@types/axios": "^0.14.4",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/winston": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.23",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "typescript": "^5"
   }
 }
