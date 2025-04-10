@@ -28,7 +28,7 @@ const MedicineUploadForm = forwardRef((props:MedicineUploadFormProps, ref) => {
         }
         if (axiosPost) {
             const getData = async () => {
-                let res = await NextAxios({
+                const res = await NextAxios({
                     map: 'post',
                     url: '/api/medicine',
                     data: values
@@ -44,7 +44,7 @@ const MedicineUploadForm = forwardRef((props:MedicineUploadFormProps, ref) => {
             getData();
         } else {
             const getData = async () => {
-                let res = await NextAxios({
+                const res = await NextAxios({
                     map: 'patch',
                     url: '/api/medicine',
                     data: {...values, id: initialValues.current.key}

@@ -81,7 +81,7 @@ const MedicinePage = () => {
     }>();
 
     const getData = useCallback(async () => {
-        let newRes = await NextAxios({
+        const newRes = await NextAxios({
             map: 'get',
             url: '/api/medicine',
             data: {
@@ -123,7 +123,7 @@ const MedicinePage = () => {
         if (!selectedRowKeys || selectedRowKeys.length === 0) {
             return;
         }
-        let res = await NextAxios({
+        const res = await NextAxios({
             map: 'delete',
             url: '/api/medicine',
             data: {
@@ -140,7 +140,7 @@ const MedicinePage = () => {
     }
 
     const onUpdate = () => {
-        let id = selectedRowKeys?.[0] as number;
+        const id = selectedRowKeys?.[0] as number;
         MedicineUploadFormRef?.current?.setFormValues(dataSource.find((item: Medicine) => item.key === id) as Medicine);
         setLoading(true)
         getData();

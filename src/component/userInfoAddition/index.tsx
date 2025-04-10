@@ -32,15 +32,15 @@ const UserInfoAddition = forwardRef((props: UserInfoAdditionProps, ref) => {
     }));
     useEffect(() => {
         const fetchData = async () => {
-            let res = await NextAxios({
+            const res = await NextAxios({
                 map: 'get',
                 url: '/api/districts',
                 data: {
                     parentCode: null
                 },
             });
-            let newRes: { districts: Districts[] } = res.data
-            let address: CascaderData[] = [];
+            const newRes: { districts: Districts[] } = res.data
+            const address: CascaderData[] = [];
             newRes.districts.forEach((item) => {
                 address.push({
                     label: item.name,
@@ -94,15 +94,15 @@ const UserInfoAddition = forwardRef((props: UserInfoAdditionProps, ref) => {
             }
             // console.log("selectedOpt:" + JSON.stringify(selectedOpt) + ",opt:" + JSON.stringify(targetOpt))
             const fetchData = async () => {
-                let res = await NextAxios({
+                const res = await NextAxios({
                     map: 'get',
                     url: '/api/districts',
                     data: {
                         parentCode: value
                     },
                 });
-                let newRes: { districts: Districts[] } = res.data
-                let address: CascaderData[] = [];
+                const newRes: { districts: Districts[] } = res.data
+                const address: CascaderData[] = [];
                 newRes.districts.forEach((item) => {
                     address.push({
                         label: item.name,
@@ -140,8 +140,8 @@ const UserInfoAddition = forwardRef((props: UserInfoAdditionProps, ref) => {
                     onChange={(value) => {
                         console.log("Cascadervalue:" + value);
                         console.log("Cascadervalue:" + JSON.stringify(addressData));
-                        let valueList = String(value).split(",");
-                        let lastCode = valueList[valueList.length - 1];
+                        const valueList = String(value).split(",");
+                        const lastCode = valueList[valueList.length - 1];
                         setUserInfo((prevState) => {
                             return {
                                 ...prevState,

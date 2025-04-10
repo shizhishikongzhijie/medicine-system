@@ -25,7 +25,7 @@ const MenuPage = () => {
                 const node: TreeNodeData = {...item, children: []};
                 nodeMap.set(item.id, node);
 
-                let parent = item.parentId ? nodeMap.get(item.parentId) : virtualRoot;
+                const parent = item.parentId ? nodeMap.get(item.parentId) : virtualRoot;
                 //(parent?.children ??= []).push(node);
                 (parent?.children || {...parent, children: []}).push(node);
                 return parent
@@ -54,14 +54,14 @@ const MenuPage = () => {
                     maxIndex = index;
                 }
             })
-            let menus = roleMenus[maxIndex];
+            const menus = roleMenus[maxIndex];
             mainMenus = convertRolesToTree([menus]);
         }
         return <RoleMenuTabs roleMenus={roleMenus} mainMenus={mainMenus}/>
     }, [roleMenus]);
     useEffect(() => {
         const fetchRoleMenus = async () => {
-            let res = await NextAxios({
+            const res = await NextAxios({
                 url: '/api/menu',
                 map: 'get',
             })

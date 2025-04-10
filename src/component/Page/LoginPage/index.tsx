@@ -58,7 +58,7 @@ const LoginPage = () => {
         const values = formApiRef.current?.getValues();
         if (values && values.username && values.password) {
             const fetchData = async () => {
-                let res = await NextAxios({
+                const res = await NextAxios({
                     map: 'get',
                     url: '/api/login',
                     data: values
@@ -97,12 +97,12 @@ const LoginPage = () => {
         }
     }
     const onRegisterComplete = () => {
-        let values: User = UserInfoAdditionRef.current?.getValues();
-        let addressCodeList = String(values.address_code).split(',');
-        let lastValue = addressCodeList[addressCodeList.length - 1];
+        const values: User = UserInfoAdditionRef.current?.getValues();
+        const addressCodeList = String(values.address_code).split(',');
+        const lastValue = addressCodeList[addressCodeList.length - 1];
         console.log('values', values)
         console.log('lastValue', lastValue)
-        let formValues: {
+        const formValues: {
             username: string,
             password: string,
         } = formApiRef.current?.getValues();
@@ -111,7 +111,7 @@ const LoginPage = () => {
         console.log('values', values)
         // 请求
         const fetchData = async () => {
-            let res = await NextAxios({
+            const res = await NextAxios({
                 map: 'post',
                 url: '/api/login',
                 data: values

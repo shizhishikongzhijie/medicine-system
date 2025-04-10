@@ -97,7 +97,7 @@ const StockPage = () => {
         setFormValues: (values: Stock) => void
     }>();
     const getData = useCallback(async () => {
-        let newRes = await NextAxios({
+        const newRes = await NextAxios({
             map: "get",
             url: '/api/stock',
             data: {
@@ -137,7 +137,7 @@ const StockPage = () => {
         if (!selectedRowKeys || selectedRowKeys.length === 0) {
             return;
         }
-        let res = await NextAxios({
+        const res = await NextAxios({
             map: 'delete',
             url: '/api/stock',
             data: {
@@ -154,7 +154,7 @@ const StockPage = () => {
     }
 
     const onUpdate = () => {
-        let id = selectedRowKeys?.[0] as number;
+        const id = selectedRowKeys?.[0] as number;
         StockUploadFormRef?.current?.setFormValues(dataSource.find((item: Stock) => item.key === id) as Stock);
         setLoading(true)
         getData();

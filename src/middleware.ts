@@ -13,9 +13,9 @@ const allowedIPs: string[] = ["192.168.1.1", "127.0.0.1", "::1"]; // 你的白�
 // 导出异步中间件函数，用于处理每个请求
 export async function middleware(req: NextRequest) {
     // 获取客户端 IP 地址
-    let clientIp: string | undefined = getIp(req);
-    let url = process.env.BASE_URL;
-    let setCookieAccessTokenConfig = {
+    const clientIp: string | undefined = getIp(req);
+    const url = process.env.BASE_URL;
+    const setCookieAccessTokenConfig = {
         isSetCookie: false,
         cookieValue: "string"
     }
@@ -26,7 +26,7 @@ export async function middleware(req: NextRequest) {
 
     if (req.url.includes("/api/redis") || req.url.includes("/api/jwt")) {
         // 检查 IP 是否在白名单中
-        let ip = getIp(req);
+        const ip = getIp(req);
         if (ip === undefined || !allowedIPs.includes(ip)) {
             console.error(`IP ${ip} is not in the allowed list.`);
             return new NextResponse("Forbidden", {status: 403});
@@ -43,7 +43,7 @@ export async function middleware(req: NextRequest) {
         } else {
             const refreshToken = req.cookies.get('RefreshToken')?.value;
             //检验合法性
-            let tokenRes = await MiddleAxios({
+            const tokenRes = await MiddleAxios({
                 url: url + "/api/jwt",
                 map: "get",
                 data: {
@@ -52,9 +52,9 @@ export async function middleware(req: NextRequest) {
             })
             if (typeof refreshToken === "string" && tokenRes.code == 200) {
                 //解析，和redis对比
-                let user = tokenRes.data;
+                const user = tokenRes.data;
                 let exp: { EXP_A: number, EXP_R: number } | undefined;
-                let res = await MiddleAxios({
+                const res = await MiddleAxios({
                     url: url + "/api/redis",
                     map: "get",
                     data: {
@@ -67,7 +67,7 @@ export async function middleware(req: NextRequest) {
                     if (exp === undefined || (exp.EXP_A !== user.exp && exp.EXP_R !== user.exp)) {
                         // 删除 Redis 中的数据
                         console.info({redisExps: exp, tokenExp: user.exp})
-                        let res = await MiddleAxios({
+                        const res = await MiddleAxios({
                             url: url + "/api/redis",
                             map: "delete",
                             data: {
@@ -100,7 +100,7 @@ export async function middleware(req: NextRequest) {
         }
     }
     if (setCookieAccessTokenConfig.isSetCookie) {
-        let res = NextResponse.next();
+        const res = NextResponse.next();
         res.cookies.set('AccessToken', setCookieAccessTokenConfig.cookieValue,
             {
                 maxAge: Number(process.env.EXPIRATION_TIME_ACCESS_TOKEN),

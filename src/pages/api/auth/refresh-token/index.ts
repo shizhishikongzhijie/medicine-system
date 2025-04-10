@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     //创建jwt
     if (jwtService.isTokenExpired(refreshToken))
         return res.status(304).json({message: "Refresh token is expired"});
-    let user: any = jwtService.verifyToken(refreshToken);
+    const user: any = jwtService.verifyToken(refreshToken);
     console.log(user);
     return res.status(200).json({
         accessToken: jwtService.generateToken({

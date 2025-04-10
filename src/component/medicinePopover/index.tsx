@@ -1,5 +1,5 @@
 'use client'
-import {Descriptions, Popover, Space} from "@douyinfe/semi-ui";
+import {Descriptions, Popover} from "@douyinfe/semi-ui";
 import {ReactNode, useCallback, useEffect, useState} from "react";
 import {Medicine} from "@/component/Page/MedicinePage/type";
 import {UTCFormat} from "@/tools";
@@ -13,7 +13,7 @@ const MedicinePopover = (props: { medicineId?: number; children: ReactNode; init
             return
         }
         const fetchData = async () => {
-            let newRes = await NextAxios({
+            const newRes = await NextAxios({
                 map: 'get',
                 url: `/api/medicine/id`,
                 data: {

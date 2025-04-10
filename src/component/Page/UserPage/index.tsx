@@ -92,7 +92,7 @@ const UserPage = () => {
     }>();
     const getData = useCallback(() => {
         const fetchData = async () => {
-            let res = await NextAxios({
+            const res = await NextAxios({
                 map: 'get',
                 url: `/api/user`,
                 data: {
@@ -101,7 +101,7 @@ const UserPage = () => {
                     pageSize: pageSize
                 }
             })
-            let newRes = res.data;
+            const newRes = res.data;
             console.log(newRes.data)
             setData(newRes?.data.map((item: any) => {
                 item.key = item.id

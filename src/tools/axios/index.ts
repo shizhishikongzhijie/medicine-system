@@ -16,7 +16,7 @@ const apiClient = axios.create({
 // 请求拦截器
 apiClient.interceptors.request.use(request => {
     // console.log(request);
-    let cookies = request.headers?.cookies;
+    const cookies = request.headers?.cookies;
     return request;
 }, error => Promise.reject(error));
 
@@ -29,7 +29,7 @@ export async function getNewAccessToken(RefreshToken: string) {
             })
         console.log({pos: '- -> -', content: "res:" + res.data.code});
         if (res.data.code === 200) {
-            let accessToken = res.data.data.AccessToken;
+            const accessToken = res.data.data.AccessToken;
             console.log({pos: '- -> -', content: "getNewAccessToken - new:" + accessToken});
             return accessToken;
         } else {
@@ -56,7 +56,7 @@ apiClient.interceptors.response.use(response => response?.data, async error => {
                 const newAccessToken = await getNewAccessToken(error.config.headers.RefreshToken);
                 if (newAccessToken) {
                     // 重新发送请求
-                    let res: any = await apiClient.request({
+                    const res: any = await apiClient.request({
                         ...error.config,
                         headers: {
                             ...error.config.headers,

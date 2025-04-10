@@ -43,7 +43,7 @@ const CustomLayout: React.FC<LayoutProps> = ({children, menus}) => {
             });
         }
         const fetchData = async () => {
-            let newRes = await NextAxios({
+            const newRes = await NextAxios({
                 map: 'get',
                 url: `/api/notifications`,
                 data: {

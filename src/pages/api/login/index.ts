@@ -49,7 +49,7 @@ const Login = async (req: NextApiRequest, res: NextApiResponse) => {
             return ResponseService.info(res, 400, '用户名或密码错误');
         }
         //设置cookie
-        let id = rows[0].id;
+        const id = rows[0].id;
         //存储登录日志
         const queryLog = `
             INSERT INTO online_user_logs (user_id, login_time, ip_address)
@@ -60,7 +60,7 @@ const Login = async (req: NextApiRequest, res: NextApiResponse) => {
         const payload = {id: rows[0].id, username: username};
         const accessToken = jwtService.generateToken(payload, {expiresIn: '1h'});
         await RedisClientInstance.selectDb(0);
-        let tokenVerified: any = jwtService.verifyToken(accessToken);
+        const tokenVerified: any = jwtService.verifyToken(accessToken);
         logger.info(`User ${id} token is ${tokenVerified || "未知"}`);
         setCookie({res}, 'AccessToken', accessToken, {
             maxAge: process.env.EXPIRATION_TIME_ACCESS_TOKEN,
@@ -69,7 +69,7 @@ const Login = async (req: NextApiRequest, res: NextApiResponse) => {
             secure: false, // 根据环境变量决定是否开启安全属性
         })
         const refreshToken = jwtService.generateToken(payload, {expiresIn: '7d'});
-        let rTokenVerified: any = jwtService.verifyToken(refreshToken);
+        const rTokenVerified: any = jwtService.verifyToken(refreshToken);
         logger.info(`User ${id} token is ${rTokenVerified || "未知"}`);
         await RedisClientInstance.set(`online_user:${id}`, {EXP_A: tokenVerified.exp, EXP_R: rTokenVerified.exp});
         setCookie({res}, 'RefreshToken', refreshToken, {

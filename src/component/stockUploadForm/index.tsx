@@ -37,7 +37,7 @@ const StockUploadForm = forwardRef((props: StockUploadFormProps, ref) => {
         values.medicine_id = JSON.parse(jsonData as string)?.id;
         if (axiosPost) {
             const fetchData = async () => {
-                let res = await NextAxios({
+                const res = await NextAxios({
                     map: 'post',
                     url: '/api/stock',
                     data: values
@@ -53,7 +53,7 @@ const StockUploadForm = forwardRef((props: StockUploadFormProps, ref) => {
             fetchData()
         } else {
             const fetchData = async () => {
-                let res = await NextAxios({
+                const res = await NextAxios({
                     map: 'patch',
                     url: '/api/stock',
                     data: {...values, id: initialValues.current.key}
