@@ -1,6 +1,6 @@
 'use client'
 // 定义一个通用的类型别名，用于存储操作中的键和值
-type StorageValue = string | number | boolean | object | null | [];
+type StorageValue = string | number | boolean | object | null | []
 
 /**
  * 检查是否在客户端执行环境，并运行回调函数。
@@ -8,9 +8,9 @@ type StorageValue = string | number | boolean | object | null | [];
  */
 function checkAndRunOnClient<T>(callback: () => T): T | null {
     if (typeof window !== 'undefined') {
-        return callback();
+        return callback()
     }
-    return null;
+    return null
 }
 
 /**
@@ -21,11 +21,11 @@ function checkAndRunOnClient<T>(callback: () => T): T | null {
 export function setLocalStorage(key: string, value: StorageValue): void {
     checkAndRunOnClient(() => {
         try {
-            localStorage.setItem(key, JSON.stringify(value));
+            localStorage.setItem(key, JSON.stringify(value))
         } catch (e) {
-            console.error('Error setting item in localStorage:', e);
+            console.error('Error setting item in localStorage:', e)
         }
-    });
+    })
 }
 
 /**
@@ -34,16 +34,19 @@ export function setLocalStorage(key: string, value: StorageValue): void {
  * @param initialValue - 如果没有找到对应的键时返回的初始值。
  * @returns 返回存储的值或初始值。
  */
-export function getLocalStorage<T extends StorageValue>(key: string, initialValue: T): T {
+export function getLocalStorage<T extends StorageValue>(
+    key: string,
+    initialValue: T
+): T {
     return checkAndRunOnClient(() => {
         try {
-            const item = localStorage.getItem(key);
-            return item ? JSON.parse(item) as T : initialValue;
+            const item = localStorage.getItem(key)
+            return item ? (JSON.parse(item) as T) : initialValue
         } catch (e) {
-            console.error('Error getting item from localStorage:', e);
-            return initialValue;
+            console.error('Error getting item from localStorage:', e)
+            return initialValue
         }
-    }) as T;
+    }) as T
 }
 
 /**
@@ -54,11 +57,11 @@ export function getLocalStorage<T extends StorageValue>(key: string, initialValu
 export function setSessionStorage(key: string, value: StorageValue): void {
     checkAndRunOnClient(() => {
         try {
-            sessionStorage.setItem(key, JSON.stringify(value));
+            sessionStorage.setItem(key, JSON.stringify(value))
         } catch (e) {
-            console.error('Error setting item in sessionStorage:', e);
+            console.error('Error setting item in sessionStorage:', e)
         }
-    });
+    })
 }
 
 /**
@@ -67,14 +70,17 @@ export function setSessionStorage(key: string, value: StorageValue): void {
  * @param initialValue - 如果没有找到对应的键时返回的初始值。
  * @returns 返回存储的值或初始值。
  */
-export function getSessionStorage<T extends StorageValue>(key: string, initialValue: T): T {
+export function getSessionStorage<T extends StorageValue>(
+    key: string,
+    initialValue: T
+): T {
     return checkAndRunOnClient(() => {
         try {
-            const item = sessionStorage.getItem(key);
-            return item ? JSON.parse(item) as T : initialValue;
+            const item = sessionStorage.getItem(key)
+            return item ? (JSON.parse(item) as T) : initialValue
         } catch (e) {
-            console.error('Error getting item from sessionStorage:', e);
-            return initialValue;
+            console.error('Error getting item from sessionStorage:', e)
+            return initialValue
         }
-    }) as T;
+    }) as T
 }

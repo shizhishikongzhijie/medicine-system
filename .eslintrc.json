@@ -1,16 +1,62 @@
 {
+  // 继承的配置文件列表，用于规范代码风格和质量标准
   "extends": [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "plugin:prettier/recommended",
+    "prettier"
   ],
+  // 插件列表，增强 ESLint 的功能
   "plugins": [
-    "simple-import-sort"
+    "react",
+    "@typescript-eslint",
+    "simple-import-sort",
+    "prettier"
   ],
+  // 使用的解析器，用于解析 TypeScript 代码
+  "parser": "@typescript-eslint/parser",
+  // 解析器配置选项
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": ".",
+    "sourceType": "module"
+  },
+  // 规则配置，用于指定代码检查规则
   "rules": {
+    // 导入语句排序规则，确保导入语句按特定顺序排列
     "simple-import-sort/imports": "error",
+    // 导出语句排序规则，确保导出语句按特定顺序排列
     "simple-import-sort/exports": "error",
+    // Prettier格式化规则，确保代码风格一致性
+    "prettier/prettier": [
+      "error",
+      {
+        "eslintIntegration": true,
+        // 启用与ESLint的集成，减少冲突
+        "singleQuote": true,
+        // 使用单引号替代双引号
+        "semi": false,
+        // 不在语句末尾添加分号
+        "bracketSpacing": true,
+        // 在括号之间添加空格
+        "tabWidth": 4,
+        // 设置缩进宽度为4个空格
+        "useTabs": false,
+        // 使用空格代替制表符进行缩进
+        "files.insertFinalNewline": true,
+        // 在文件末尾插入一个新行
+        "htmlWhitespaceSensitivity": "strict",
+        // 严格控制HTML中的空白字符
+        "trailingComma": "none",
+        // 不添加尾随逗号
+        "endOfLine": "auto"
+        // 自动检测并设置行尾字符
+      }
+    ],
+    // 禁止使用any类型，提高类型安全性
     "@typescript-eslint/no-explicit-any": "error",
+    // 禁止未使用的变量，提高代码效率
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
@@ -19,8 +65,52 @@
         "caughtErrorsIgnorePattern": "^_"
       }
     ],
-    "react-hooks/exhaustive-deps": "warn",
+    // React Hooks 规则，确保正确使用React Hooks
+    "react-hooks/rules-of-hooks": "error",
+    // 强制 Hooks 调用顺序
+    "react-hooks/exhaustive-deps": [
+      "warn",
+      {
+        "additionalHooks": "(useRecoilCallback)"
+      }
+    ],
+    // React组件必须有显示名称，提高可调试性
     "react/display-name": "error",
-    "@next/next/no-img-element": "error"
-  }
+    // Next.js 规则，禁止使用img元素，推荐使用next/image
+    "@next/next/no-img-element": "error",
+    // 禁止使用不安全的参数，提高代码安全性
+    "@typescript-eslint/no-unsafe-argument": "error",
+    // 警告不安全的成员访问，提高代码安全性
+    "@typescript-eslint/no-unsafe-member-access": "warn",
+    // 强制类型导入的一致性，提高代码可维护性
+    "@typescript-eslint/consistent-type-imports": "error",
+    // React JSX Pascal命名规则，确保JSX元素命名一致性
+    "react/jsx-pascal-case": [
+      "error",
+      {
+        "allowAllCaps": true
+      }
+    ]
+
+    // 强制异步加载脚本
+    //    "@typescript-eslint/explicit-function-return-type": [
+    //      "error",
+    //      {
+    //        "allowExpressions": true
+    //      }
+    //    ]
+  },
+  // 配置特定文件的规则覆盖
+  "overrides": [
+    {
+      "files": [
+        "src/pages/**/*",
+        "src/tools/**/*",
+        "src/app/**/*"
+      ],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    }
+  ]
 }

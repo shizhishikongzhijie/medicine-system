@@ -1,6 +1,6 @@
-import {Notification} from "@/component/Layout/type";
+import type { Notification } from "@/component/layout/type";
 
-interface NotificationUser extends Notification{
-    created_by_name: string
+interface NotificationUser extends Notification {
+  created_by_name: string;
 }
-export type { NotificationUser}
+export type { NotificationUser };
