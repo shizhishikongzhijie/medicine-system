@@ -1,8 +1,8 @@
 'use client'
 import {Button, Empty} from "@douyinfe/semi-ui";
-import {useEffect, useState} from "react";
-import {useRouter} from "next/navigation";
 import Image from "next/image";
+import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
 
 function NotFoundImage() {
     return (

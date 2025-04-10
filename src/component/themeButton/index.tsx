@@ -1,11 +1,12 @@
 'use client'
-import {useEffect, useState} from 'react';
-import {Button} from '@douyinfe/semi-ui';
 import {IconMoon, IconSun} from "@douyinfe/semi-icons";
-import {getLocalStorage, setLocalStorage} from "@/tools/storage";
+import {Button} from '@douyinfe/semi-ui';
+import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "@/store";
+
 import {setTheme} from "@/reducer/themeSlice";
+import {AppDispatch, RootState} from "@/store";
+import {getLocalStorage, setLocalStorage} from "@/tools/storage";
 
 function ThemeButton() {
     const [modeLight, setModeLight] = useState<boolean>(useSelector((state: RootState) => state.theme.value) === 'light');

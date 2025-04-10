@@ -1,7 +1,8 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
+
 import logger from "@/tools/logger";
-import ResponseService from "@/tools/res";
 import {RedisClientInstance} from "@/tools/redis";
+import ResponseService from "@/tools/res";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {

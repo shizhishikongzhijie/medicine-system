@@ -1,4 +1,5 @@
 import {Metadata} from "next";
+
 import UserPage from "@/component/Page/UserPage";
 
 // 设置页面标题和描述

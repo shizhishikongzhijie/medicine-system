@@ -1,13 +1,16 @@
 'use client'
-import {Button, Checkbox, Form, Notification} from "@douyinfe/semi-ui";
-import styles from './index.module.css'
-import {CSSProperties, useEffect, useMemo, useRef, useState} from "react";
 import './index.css'
+
+import {Button, Checkbox, Form, Notification} from "@douyinfe/semi-ui";
 import {FormApi} from "@douyinfe/semi-ui/lib/es/form";
+import {useRouter} from "next/navigation";
+import {CSSProperties, useEffect, useMemo, useRef, useState} from "react";
+
+import {UserInfoAddition} from "@/component";
 import {User} from "@/component/Page/LoginPage/type";
 import {NextAxios} from "@/tools/axios/NextAxios";
-import {useRouter} from "next/navigation";
-import {UserInfoAddition} from "@/component";
+
+import styles from './index.module.css'
 
 const LoginPage = () => {
     const loginRef = useRef<HTMLDivElement>(null)

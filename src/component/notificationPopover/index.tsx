@@ -1,6 +1,8 @@
-import {Empty, List} from "@douyinfe/semi-ui";
-import {Notification} from "@/component/Layout/type";
 import './index.css'
+
+import {Empty, List} from "@douyinfe/semi-ui";
+
+import {Notification} from "@/component/Layout/type";
 
 interface NotificationPopoverProps {
     dataSource?: Notification[]

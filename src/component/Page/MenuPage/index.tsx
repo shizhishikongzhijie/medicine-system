@@ -1,9 +1,10 @@
 'use client'
 import {TabPane, Tabs, Tree} from "@douyinfe/semi-ui";
+import {TreeNodeData, Value} from "@douyinfe/semi-ui/lib/es/tree";
 import {useCallback, useEffect, useState} from "react";
+
 import {RoleMenu} from "@/component/Page/MenuPage/type";
 import {NextAxios} from "@/tools/axios/NextAxios";
-import {TreeNodeData, Value} from "@douyinfe/semi-ui/lib/es/tree";
 
 const MenuPage = () => {
     const [roleMenus, setRoleMenus] = useState<RoleMenu[]>();

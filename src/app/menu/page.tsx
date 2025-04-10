@@ -1,4 +1,5 @@
 import {Metadata} from "next";
+
 import MenuPage from "@/component/Page/MenuPage";
 
 // 设置页面标题和描述

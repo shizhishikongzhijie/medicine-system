@@ -1,10 +1,11 @@
 'use client'
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {NotificationUser} from "@/component/Page/NotificationPage/type";
-import {Medicine} from "@/component/Page/MedicinePage/type";
-import {NextAxios} from "@/tools/axios/NextAxios";
 import {Table} from "@douyinfe/semi-ui";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+
+import {Medicine} from "@/component/Page/MedicinePage/type";
+import {NotificationUser} from "@/component/Page/NotificationPage/type";
 import {UTCFormat} from "@/tools";
+import {NextAxios} from "@/tools/axios/NextAxios";
 
 const columns = [
     {

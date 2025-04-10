@@ -1,12 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from "next";
-import {User} from "@/component/Page/LoginPage/type";
+import {destroyCookie} from "nookies";
 import logger from "@/tools/logger";
-import pool from "@/db/index.js";
-import argon2 from "argon2";
-import {destroyCookie, setCookie} from "nookies";
-import jwtService from "@/tools/jwt";
 import ResponseService from "@/tools/res";
-import {getIp} from "@/tools";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {

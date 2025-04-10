@@ -1,13 +1,14 @@
-import type {NextApiRequest, NextApiResponse} from "next";
-import {User} from "@/component/Page/LoginPage/type";
-import logger from "@/tools/logger";
-import pool from "@/db/index.js";
 import argon2 from "argon2";
+import type {NextApiRequest, NextApiResponse} from "next";
 import {setCookie} from "nookies";
-import jwtService from "@/tools/jwt";
-import ResponseService from "@/tools/res";
+
+import {User} from "@/component/Page/LoginPage/type";
+import pool from "@/db/index.js";
 import {getIp} from "@/tools";
+import jwtService from "@/tools/jwt";
+import logger from "@/tools/logger";
 import {RedisClientInstance} from "@/tools/redis";
+import ResponseService from "@/tools/res";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {

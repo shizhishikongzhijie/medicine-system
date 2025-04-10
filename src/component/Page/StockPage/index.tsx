@@ -1,12 +1,14 @@
 'use client'
-import {UTCFormat} from "@/tools";
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {Stock} from "@/component/Page/StockPage/type";
-import {Button, Input, Modal, Notification, Table} from "@douyinfe/semi-ui";
 import './index.css'
+
 import {IconInfoCircle} from "@douyinfe/semi-icons";
-import {NextAxios} from "@/tools/axios/NextAxios";
+import {Button, Input, Modal, Notification, Table} from "@douyinfe/semi-ui";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+
 import {MedicinePopover, StockUploadForm} from "@/component";
+import {Stock} from "@/component/Page/StockPage/type";
+import {UTCFormat} from "@/tools";
+import {NextAxios} from "@/tools/axios/NextAxios";
 
 const columns = [
     {

@@ -1,4 +1,5 @@
 import {Metadata} from "next";
+
 import MedicinePage from "@/component/Page/MedicinePage";
 
 // 设置页面标题和描述

@@ -1,6 +1,7 @@
 'use client'
-import {del, get, patch, post, put} from './index';
 import {Notification} from "@douyinfe/semi-ui";
+
+import {del, get, patch, post, put} from './index';
 
 interface nextAxiosProps {
     map: 'get' | 'put' | 'post' | 'delete' | 'patch',

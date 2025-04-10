@@ -1,13 +1,14 @@
 'use client'
-import {Avatar, Badge, Breadcrumb, Button, Layout, Nav, Popover} from "@douyinfe/semi-ui";
 import {IconBell, IconHelpCircle, IconSemiLogo,} from "@douyinfe/semi-icons";
+import {Avatar, Badge, Breadcrumb, Button, Layout, Nav, Popover} from "@douyinfe/semi-ui";
 import Link from "next/link";
-import React, {useEffect, useRef, useState} from "react";
 import {usePathname, useRouter} from 'next/navigation';
-import {NextAxios} from "@/tools/axios/NextAxios"; // 引入 useRouter 和 usePathname
+import React, {useEffect, useRef, useState} from "react";
+
+import {NotificationPopover, ThemeButton} from "@/component";
 import {InitNavItems, LayoutProps, Notification} from "@/component/layout/type";
 import {BREADCRUMB_MAP, INIT_NAV_ITEMS, ROUTER_MAP} from "@/config";
-import {NotificationPopover, ThemeButton} from "@/component";
+import {NextAxios} from "@/tools/axios/NextAxios"; // 引入 useRouter 和 usePathname
 
 
 const CustomLayout: React.FC<LayoutProps> = ({children, menus}) => {

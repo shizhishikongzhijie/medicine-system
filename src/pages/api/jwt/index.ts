@@ -1,7 +1,8 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
+
+import jwtService from "@/tools/jwt";
 import logger from "@/tools/logger";
 import ResponseService from "@/tools/res";
-import jwtService from "@/tools/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {

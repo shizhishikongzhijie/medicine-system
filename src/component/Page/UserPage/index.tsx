@@ -1,11 +1,13 @@
 'use client'
+import './index.css'
+
 import {Button, Input, Table} from "@douyinfe/semi-ui";
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {Medicine} from "@/component/Page/MedicinePage/type";
+
 import {UserInfo} from "@/component/Page/LoginPage/type";
+import {Medicine} from "@/component/Page/MedicinePage/type";
 import {UTCFormat} from "@/tools";
 import {NextAxios} from "@/tools/axios/NextAxios";
-import './index.css'
 
 const columns = [
     {

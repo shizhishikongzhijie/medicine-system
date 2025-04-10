@@ -1,4 +1,5 @@
 import {Metadata} from "next";
+
 import StockPage from "@/component/Page/StockPage";
 
 // 设置页面标题和描述

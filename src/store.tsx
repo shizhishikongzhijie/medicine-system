@@ -1,11 +1,12 @@
 
 // store.tsx
 "use client";
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import userReducer from "@/reducer/userSlice"
-import themeReducer from "@/reducer/themeSlice"
-import { Provider } from "react-redux";
+import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import React from "react";
+import {Provider} from "react-redux";
+
+import themeReducer from "@/reducer/themeSlice"
+import userReducer from "@/reducer/userSlice"
 
 const rootReducer = combineReducers({
     user: userReducer,

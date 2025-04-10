@@ -1,6 +1,7 @@
 'use client'
 import {Descriptions, Popover} from "@douyinfe/semi-ui";
 import {ReactNode, useCallback, useEffect, useState} from "react";
+
 import {Medicine} from "@/component/Page/MedicinePage/type";
 import {UTCFormat} from "@/tools";
 import {NextAxios} from "@/tools/axios/NextAxios";

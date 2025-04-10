@@ -1,14 +1,16 @@
+import "@douyinfe/semi-ui/dist/css/semi.min.css" // --turbo需要，否则没样式
+import "./globals.css";
+
 import type {Metadata} from "next";
 import localFont from "next/font/local";
-import "@douyinfe/semi-ui/dist/css/semi.min.css" // --turbo需要，否则没样式
-import {ReduxProvider} from "@/store";
 import {cookies} from "next/headers";
-import "./globals.css";
-import jwtService from "@/tools/jwt";
-import pool from "@/db/index.js";
-import logger from "@/tools/logger";
-import {Menus} from "@/component/layout/type";
+
 import {CustomLayout} from "@/component";
+import {Menus} from "@/component/layout/type";
+import pool from "@/db/index.js";
+import {ReduxProvider} from "@/store";
+import jwtService from "@/tools/jwt";
+import logger from "@/tools/logger";
 
 // const geistSans = localFont({
 //     src: "./fonts/GeistVF.woff",

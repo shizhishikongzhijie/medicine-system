@@ -1,4 +1,5 @@
 import {Metadata} from "next";
+
 import NotificationPage from "@/component/Page/NotificationPage";
 
 // 设置页面标题和描述

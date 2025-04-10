@@ -1,10 +1,11 @@
 'use client'
-import {forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {Form, JsonViewer, Modal, Notification, Select} from "@douyinfe/semi-ui";
 import {FormApi} from "@douyinfe/semi-ui/lib/es/form";
+import {forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState} from "react";
+
+import {MedicinePopover} from "@/component";
 import {Medicine} from "@/component/Page/MedicinePage/type";
 import {NextAxios} from "@/tools/axios/NextAxios";
-import {MedicinePopover} from "@/component";
 
 interface StockUploadFormProps {
     callBack?: () => Promise<void>
