@@ -9,8 +9,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return getStock(req, res);
         case 'POST':
             return addStock(req, res);
-        // case 'PATCH':
-        //     return updateStock(req, res);
+        case 'PATCH':
+            return updateStock(req, res);
         case 'DELETE':
             return deleteStock(req, res);
         default:
@@ -81,6 +81,26 @@ const addStock = async (req: NextApiRequest, res: NextApiResponse) => {
         return ResponseService.error(res, 400, String(error));
     }
 }
+const updateStock = async (req: NextApiRequest, res: NextApiResponse) => {
+    const {id, medicine_id, quantity, batch_number, production_date, expiry_date, remark} = req.body;
+    const query = `
+        UPDATE stock_in_records
+        SET medicine_id     = ?,
+            quantity        = ?,
+            batch_number    = ?,
+            production_date = ?,
+            expiry_date     = ?,
+            remark          = ?
+        WHERE id = ?`
+    try {
+        // 使用参数化查询防止SQL注入
+        const result = await pool.query(query, [medicine_id, quantity, batch_number, production_date, expiry_date, remark, id]);
+        return ResponseService.success(res, 'Stock updated successfully');
+    } catch (error) {
+        console.error('Error updating stock:', error);
+        return ResponseService.error(res, 400, String(error));
+    }
+};
 const deleteStock = async (req: NextApiRequest, res: NextApiResponse) => {
     const {ids} = req.body;
     const idsParam = ids as (string | number)[];

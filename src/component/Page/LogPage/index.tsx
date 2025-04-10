@@ -3,8 +3,9 @@ import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {NotificationUser} from "@/component/Page/NotificationPage/type";
 import {Medicine} from "@/component/Page/MedicinePage/type";
 import {NextAxios} from "@/tools/axios/NextAxios";
-import {Button, Input, Table, Tag} from "@douyinfe/semi-ui";
+import {Table} from "@douyinfe/semi-ui";
 import {UTCFormat} from "@/tools";
+
 const columns = [
     {
         title: 'ip地址',
@@ -30,8 +31,9 @@ const columns = [
         title: '登出时间',
         width: 200,
         dataIndex: 'logout_time',
-        render: (value: string) => {
-            return <span>{UTCFormat(value)}</span>
+        render: (value: string | null) => {
+
+            return <span>{value ? UTCFormat(value) : '未退出'}</span>
         },
     }
 ];
