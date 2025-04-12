@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import pool from '@/db/index.js'
+import { getUid } from '@/tools/cookie'
 import ResponseService from '@/tools/res'
 
 export default async function handler(
@@ -10,8 +11,8 @@ export default async function handler(
     switch (req.method) {
         case 'GET':
             return getNotifications(req, res)
-        // case 'POST':
-        //     return addNotifications(req, res);
+        case 'POST':
+            return addNotifications(req, res)
         // case 'PATCH':
         //     return updateNotifications(req, res);
         // case 'DELETE':
@@ -86,5 +87,29 @@ const getNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
     } catch (error) {
         console.error('Error fetching Notifications:', error)
         return ResponseService.error(res, 400, String(error))
+    }
+}
+const addNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+        const { title, content } = req.body
+        if (!title || !content) {
+            return ResponseService.error(res, 400, '参数错误')
+        } else {
+            // 获取当前登录用户的ID
+            const uid = getUid(req, res)
+            if (!uid) {
+                return ResponseService.error(res, 404, '用户未登录')
+            }
+            const query = `INSERT INTO notifications (title, content, created_by)
+                           VALUES (?, ?, ?)`
+            const [result]: any[] = await pool.query(query, [
+                title,
+                content,
+                uid
+            ])
+            return ResponseService.success(res, '添加成功', result)
+        }
+    } catch (error) {
+        console.error('Error fetching Notifications:', error)
     }
 }

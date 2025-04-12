@@ -4,5 +4,10 @@ interface ResType {
     error?: string
     data?: any
 }
-
-export type { ResType }
+interface UserTokenType {
+    id: number
+    username: string
+    iat: number
+    exp: number
+}
+export type { ResType, UserTokenType }

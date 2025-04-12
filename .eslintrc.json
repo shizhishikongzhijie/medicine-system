@@ -8,12 +8,7 @@
     "prettier"
   ],
   // 插件列表，增强 ESLint 的功能
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "simple-import-sort",
-    "prettier"
-  ],
+  "plugins": ["react", "@typescript-eslint", "simple-import-sort", "prettier"],
   // 使用的解析器，用于解析 TypeScript 代码
   "parser": "@typescript-eslint/parser",
   // 解析器配置选项
@@ -103,11 +98,7 @@
   // 配置特定文件的规则覆盖
   "overrides": [
     {
-      "files": [
-        "src/pages/**/*",
-        "src/tools/**/*",
-        "src/app/**/*"
-      ],
+      "files": ["src/pages/**/*", "src/tools/**/*", "src/app/**/*"],
       "rules": {
         "@typescript-eslint/explicit-function-return-type": "off"
       }

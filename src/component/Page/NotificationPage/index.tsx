@@ -10,6 +10,8 @@ import { UTCFormat } from '@/tools'
 import { NextAxios } from '@/tools/axios/NextAxios'
 import type { ResType } from '@/tools/axios/type'
 
+import NotificationUploadForm from '../../notificationUploadForm'
+
 const columns = [
     {
         title: '标题',
@@ -71,7 +73,7 @@ const NotificationPage = () => {
     const [index, setIndex] = useState(1)
     const [pageSize, setPageSize] = useState(5)
     const scroll = useMemo(() => ({ y: 280 }), [])
-    const MedicineUploadFormRef = useRef<{
+    const NotificationUploadRef = useRef<{
         openModal: () => void
         closeModal: () => void
         setFormValues: (values: Medicine) => void
@@ -105,11 +107,15 @@ const NotificationPage = () => {
     }, [index, pageSize])
     return (
         <>
+            <NotificationUploadForm
+                ref={NotificationUploadRef}
+                callBack={getData}
+            />
             <div className={'notification-table-header'}>
                 <div className={'notification-table-header__left'}>
                     <Button
                         onClick={() => {
-                            MedicineUploadFormRef?.current?.openModal()
+                            NotificationUploadRef?.current?.openModal()
                         }}
                     >
                         导入

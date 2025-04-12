@@ -9,6 +9,7 @@ import { CustomLayout } from '@/component'
 import type { Menus } from '@/component/layout/type'
 import pool from '@/db/index.js'
 import { ReduxProvider } from '@/store'
+import type { UserTokenType } from '@/tools/axios/type'
 import jwtService from '@/tools/jwt'
 import logger from '@/tools/logger'
 
@@ -48,7 +49,7 @@ export default async function RootLayout({
     let menus: Menus[] | undefined = undefined
     if (token && !jwtService.isTokenExpired(token)) {
         try {
-            const user: any = jwtService.verifyToken(token) // 验证 Token
+            const user: UserTokenType = jwtService.verifyToken(token) // 验证 Token
             console.log('Token 验证成功:', user)
             menus = await getMenusPool(user.id)
             logger.info('getMenusSync result:', menus)

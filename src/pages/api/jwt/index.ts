@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+import type { UserTokenType } from '@/tools/axios/type'
 import jwtService from '@/tools/jwt'
 import logger from '@/tools/logger'
 import ResponseService from '@/tools/res'
@@ -31,7 +32,7 @@ async function getJwt(req: NextApiRequest, res: NextApiResponse) {
             return ResponseService.error(res, 400, 'Token is required')
         }
         if (!jwtService.isTokenExpired(token)) {
-            const value = jwtService.verifyToken(token)
+            const value: UserTokenType = jwtService.verifyToken(token)
             if (!value) {
                 return ResponseService.error(res, 404, 'Token not found')
             }

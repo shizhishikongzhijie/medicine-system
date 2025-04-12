@@ -5,6 +5,7 @@ import { setCookie } from 'nookies'
 import type { User } from '@/component/Page/LoginPage/type'
 import pool from '@/db/index.js'
 import { getIp } from '@/tools'
+import type { UserTokenType } from '@/tools/axios/type'
 import jwtService from '@/tools/jwt'
 import logger from '@/tools/logger'
 import { RedisClientInstance } from '@/tools/redis'
@@ -73,7 +74,7 @@ const Login = async (req: NextApiRequest, res: NextApiResponse) => {
             expiresIn: '1h'
         })
         await RedisClientInstance.selectDb(0)
-        const tokenVerified: any = jwtService.verifyToken(accessToken)
+        const tokenVerified: UserTokenType = jwtService.verifyToken(accessToken)
         logger.info(`User ${id} token is ${tokenVerified || '未知'}`)
         setCookie({ res }, 'AccessToken', accessToken, {
             maxAge: process.env.EXPIRATION_TIME_ACCESS_TOKEN,
@@ -84,7 +85,8 @@ const Login = async (req: NextApiRequest, res: NextApiResponse) => {
         const refreshToken = jwtService.generateToken(payload, {
             expiresIn: '7d'
         })
-        const rTokenVerified: any = jwtService.verifyToken(refreshToken)
+        const rTokenVerified: UserTokenType =
+            jwtService.verifyToken(refreshToken)
         logger.info(`User ${id} token is ${rTokenVerified || '未知'}`)
         await RedisClientInstance.set(`online_user:${id}`, {
             EXP_A: tokenVerified.exp,

@@ -1,8 +1,7 @@
 'use client'
 import { Table } from '@douyinfe/semi-ui'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import type { Medicine } from '@/component/Page/MedicinePage/type'
 import type { NotificationUser } from '@/component/Page/NotificationPage/type'
 import { UTCFormat } from '@/tools'
 import { NextAxios } from '@/tools/axios/NextAxios'
@@ -47,11 +46,6 @@ const LogPage = () => {
     const [index, setIndex] = useState(1)
     const [pageSize, setPageSize] = useState(5)
     const scroll = useMemo(() => ({ y: 280 }), [])
-    const MedicineUploadFormRef = useRef<{
-        openModal: () => void
-        closeModal: () => void
-        setFormValues: (values: Medicine) => void
-    }>()
     const getData = useCallback(() => {
         const fetchData = async () => {
             const res: ResType = await NextAxios({

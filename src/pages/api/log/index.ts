@@ -3,6 +3,7 @@ import { parseCookies, setCookie } from 'nookies'
 
 import pool from '@/db/index.js'
 import { getIp } from '@/tools'
+import type { UserTokenType } from '@/tools/axios/type'
 import jwtService from '@/tools/jwt'
 import logger from '@/tools/logger'
 import ResponseService from '@/tools/res'
@@ -56,7 +57,7 @@ async function getLog(req: NextApiRequest, res: NextApiResponse) {
         let uid
         if (token && !jwtService.isTokenExpired(token)) {
             try {
-                const user: any = jwtService.verifyToken(token) // 验证 Token
+                const user: UserTokenType = jwtService.verifyToken(token) // 验证 Token
                 uid = user.id
                 logger.info('Token 验证成功: 用户信息:', user) // 示例：打印用户信息（根据需求使用）
             } catch (error) {
@@ -101,7 +102,7 @@ async function addLog(req: NextApiRequest, res: NextApiResponse) {
         let uid
         if (token && !jwtService.isTokenExpired(token)) {
             try {
-                const user: any = jwtService.verifyToken(token) // 验证 Token
+                const user: UserTokenType = jwtService.verifyToken(token) // 验证 Token
                 uid = user.id
                 logger.info('Token 验证成功: 用户信息:', user) // 示例：打印用户信息（根据需求使用）
             } catch (error) {
@@ -138,7 +139,7 @@ async function updateLog(req: NextApiRequest, res: NextApiResponse) {
         let uid
         if (token && !jwtService.isTokenExpired(token)) {
             try {
-                const user: any = jwtService.verifyToken(token) // 验证 Token
+                const user: UserTokenType = jwtService.verifyToken(token) // 验证 Token
                 uid = user.id
                 logger.info('Token 验证成功: 用户信息:', user) // 示例：打印用户信息（根据需求使用）
             } catch (error) {

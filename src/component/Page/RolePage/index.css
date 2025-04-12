@@ -1,0 +1,16 @@
+.role-table-header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.role-table-header__left{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.role-table-header__right{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

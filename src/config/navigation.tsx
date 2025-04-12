@@ -4,6 +4,7 @@ import {
     IconHome,
     IconInbox,
     IconMenu,
+    IconSafe,
     IconSetting,
     IconUser
 } from '@douyinfe/semi-icons'
@@ -22,6 +23,15 @@ export const initNavItems: InitNavItems[] = [
         ]
     },
     { itemKey: 'User', text: '用户管理', icon: <IconUser size="large" /> },
+    {
+        itemKey: 'RoleManagement',
+        text: '角色管理',
+        icon: <IconSafe size="large" />,
+        items: [
+            { itemKey: 'Role', text: '角色列表' },
+            { itemKey: 'Permission', text: '权限列表' }
+        ]
+    },
     { itemKey: 'Menu', text: '菜单管理', icon: <IconMenu size="large" /> },
     {
         itemKey: 'Notification',
