@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 export default function RopeSimulation() {
     const canvasRef = useRef(null)
@@ -16,7 +16,8 @@ export default function RopeSimulation() {
             Composites,
             Constraint,
             Mouse,
-            MouseConstraint
+            MouseConstraint,
+            Events
         } = Matter
 
         // 创建引擎
@@ -43,75 +44,12 @@ export default function RopeSimulation() {
         const runner = Runner.create()
         Runner.run(runner, engine)
 
-        // // 添加地面
-        // const ground = Bodies.rectangle(400, 600, 1200, 50.5, {
-        //     isStatic: true
-        // })
-        // Composite.add(world, [ground])
-
-        // // 绳子 A：矩形组成的链条
-        // const groupA = Body.nextGroup(true)
-        // const ropeA = Composites.stack(100, 50, 8, 1, 10, 10, (x, y) => {
-        //     return Bodies.rectangle(x, y, 50, 20, {
-        //         collisionFilter: { group: groupA }
-        //     })
-        // })
-        // Composites.chain(ropeA, 0.5, 0, -0.5, 0, {
-        //     stiffness: 0.8,
-        //     length: 2,
-        //     render: { type: 'line' }
-        // })
-        // Composite.add(
-        //     ropeA,
-        //     Constraint.create({
-        //         bodyB: ropeA.bodies[0],
-        //         pointB: { x: -25, y: 0 },
-        //         pointA: {
-        //             x: ropeA.bodies[0].position.x,
-        //             y: ropeA.bodies[0].position.y
-        //         },
-        //         stiffness: 0.5
-        //     })
-        // )
-        // Composite.add(world, ropeA)
-        //
-        // // 绳子 B：圆形组成的链条
-        // const groupB = Body.nextGroup(true)
-        // const ropeB = Composites.stack(350, 50, 10, 1, 10, 10, (x, y) => {
-        //     return Bodies.circle(x, y, 20, {
-        //         collisionFilter: { group: groupB }
-        //     })
-        // })
-        // Composites.chain(ropeB, 0.5, 0, -0.5, 0, {
-        //     stiffness: 0.8,
-        //     length: 2,
-        //     render: { type: 'line' }
-        // })
-        // Composite.add(
-        //     ropeB,
-        //     Constraint.create({
-        //         bodyB: ropeB.bodies[0],
-        //         pointB: { x: -20, y: 0 },
-        //         pointA: {
-        //             x: ropeB.bodies[0].position.x,
-        //             y: ropeB.bodies[0].position.y
-        //         },
-        //         stiffness: 0.5
-        //     })
-        // )
-        // Composite.add(world, ropeB)
-
         // 绳子 C：带圆角的矩形组成的链条
         const groupC = Body.nextGroup(true)
         const ropeC = Composites.stack(600, 50, 13, 1, 10, 10, (x, y) => {
             return Bodies.rectangle(x - 20, y, 50, 20, {
                 collisionFilter: { group: groupC },
                 chamfer: 5 // 圆角效果
-                // render: {
-                //     fillStyle: '#ffcc00', // 设置填充颜色
-                //     strokeStyle: '#ff0000', // 设置边框颜色
-                //     lineWidth: 2 // 边框宽度
-                // }
             })
         })
         Composites.chain(ropeC, 0.3, 0, -0.3, 0, { stiffness: 1, length: 0 })
@@ -128,6 +66,38 @@ export default function RopeSimulation() {
             })
         )
         Composite.add(world, ropeC)
+
+        // 加载背景图片
+        const backgroundImg = new Image()
+        backgroundImg.src = '/lian.webp' // 替换为实际图片路径
+
+        // 自定义绘制逻辑
+        Events.on(render, 'afterRender', () => {
+            const ctx = render.canvas.getContext('2d')
+
+            // 遍历 ropeC 的每个矩形
+            ropeC.bodies.forEach((body) => {
+                const { x, y } = body.position
+                const width = body.bounds.max.x - body.bounds.min.x
+                const height = body.bounds.max.y - body.bounds.min.y
+
+                // 绘制背景图片
+                ctx.save()
+                ctx.translate(x, y) // 移动到物体中心
+                // ctx.rotate(body.angle) // 根据物体角度旋转
+                if (backgroundImg.complete) {
+                    // 确保图片已加载完成
+                    ctx.drawImage(
+                        backgroundImg,
+                        -width / 2, // 图片左上角相对于物体中心的偏移
+                        -height / 2,
+                        width, // 图片宽度
+                        height // 图片高度
+                    )
+                }
+                ctx.restore()
+            })
+        })
 
         // 添加鼠标控制
         const mouse = Mouse.create(render.canvas)
