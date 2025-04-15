@@ -105,7 +105,6 @@ const HomePage = () => {
                     />
                 </Skeleton>
             </div>
-            {/*</Skeleton>*/}
         </div>
     )
 }
