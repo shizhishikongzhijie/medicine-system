@@ -1,111 +1,89 @@
 # 药品管理系统
 
-这是一个使用 [Next.js](https://nextjs.org) 框架构建的项目，旨在帮助用户管理药品信息。
+![Semi Design 风格](https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/semi-bg.jpg)
 
-## 功能
+## 项目简介
 
-- 用户登录和注册
-- 药品信息的增删改查
-- 库存管理
-- 通知和日志系统
+基于 Next.js 14 构建的现代药品管理系统，集成以下核心功能：
 
-## 开始使用
+- 🧑⚕️ 药品全生命周期管理（CRUD）
+- 📦 实时库存追踪与预警
+- 🔐 JWT 鉴权与 RBAC 权限体系
+- 📊 操作日志审计追踪
+- 🔔 系统通知管理
+- 🌓 主题切换功能
 
-首先，运行开发服务器：
+**技术栈**：  
+Next.js 14 | TypeScript 5 | Redux Toolkit | Semi Design | MySQL | Redis
+
+## 功能亮点
+
+### 系统架构
+
+![架构图](https://via.placeholder.com/800x400.png/007ACC/fff?text=System+Architecture)
+
+### 核心模块
+
+| 模块    | 技术实现                      | 关键特性             |
+|-------|---------------------------|------------------|
+| 认证授权  | JWT + Redis 会话管理          | 双Token自动刷新机制     |
+| 权限管理  | RBAC 模型                   | 动态路由权限校验         |
+| 数据持久化 | MySQL 关系型存储               | Sequelize ORM 管理 |
+| 缓存加速  | Redis 热点数据缓存              | 自动缓存失效策略         |
+| 状态管理  | Redux Toolkit + RTK Query | 自动生成API客户端       |
+| UI组件库 | Semi Design 企业级组件库        | 深色/浅色主题适配        |
+
+## 项目结构
+```plaintext
+.
+├── src
+│ ├── app/ # App Router 路由
+│ ├── components/ # 可复用组件
+│ │ ├── Page/ # 页面级组件
+│ │ └── layout/ # 全局布局组件
+│ ├── db/ # 数据库配置
+│ ├── pages/api/ # API 路由
+│ │ ├── auth/ # 认证相关
+│ │ ├── medicine/ # 药品管理
+│ │ └── stock/ # 库存管理
+│ ├── reducer/ # Redux切片
+│ ├── tools/ # 工具类
+│ │ ├── axios/ # 封装请求实例
+│ │ ├── jwt/ # Token处理
+│ │ └── redis/ # 缓存管理
+└───└── middleware.ts # 全局中间件
+```
+
+## 快速开始
+
+### 环境准备
+
+1. 安装依赖
+
+   ```bash
+      npm install
+   ```
+
+2. 配置环境变量
+   cp .env.example .env.local
+   `.env.local` 配置示例：
+```ini
+   DATABASE_URL=mysql://user:pass@localhost:3306/med_system
+   REDIS_URL=redis://localhost:6379
+   JWT_SECRET=your_secure_secret
+   NEXTAUTH_URL=http://localhost:3000
+```
+
+
+### 开发运行
 
 ```bash
 npm run dev
-# 或者
-yarn dev
-# 或者
-pnpm dev
-# 或者
-bun dev
 ```
 
-在浏览器中打开 [http://localhost:3000](http://localhost:3000) 来查看项目。
+### 生产构建
 
-通过修改 `app/page.tsx` 文件，您可以开始编辑页面。保存文件后，页面将自动更新。
+```bash
+npm run build && npm start
+```
 
-## 项目结构
-
-项目包含以下主要目录和文件：
-
-- `src/app`: 包含应用程序的所有页面和布局组件。
-- `src/component`: 包含应用程序中使用的所有可复用组件。
-- `src/db`: 包含数据库相关的配置和操作。
-- `src/middleware.ts`: 包含中间件配置，用于处理请求和响应。
-- `src/pages/api`: 包含所有 API 路由。
-- `src/reducer`: 包含 Redux 状态管理相关的切片。
-- `src/store.tsx`: 包含 Redux 状态管理的配置和创建 Redux 存储。
-- `src/tools`: 包含各种工具函数，如 Axios 配置、JWT 处理、日志记录等。
-
-## 学习更多
-
-要了解更多关于 Next.js 的信息，请查看以下资源：
-
-- [Next.js 文档](https://nextjs.org/docs) - 了解 Next.js 的功能和 API。
-- [学习 Next.js](https://nextjs.org/learn) - 一个交互式的 Next.js 教程。
-
-您还可以查看 [Next.js GitHub 仓库](https://github.com/vercel/next.js) - 您的反馈和贡献是受欢迎的！
-
-## 部署
-
-最简单的部署 Next.js 应用程序的方式是使用 [Vercel 平台](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) 由 Next.js 的创建者提供。
-
-查看我们的 [Next.js 部署文档](https://nextjs.org/docs/app/building-your-application/deploying) 以获取更多详细信息。
-
-## 注意
-
-请确保在使用本项目时遵守所有适用的法律法规，并确保用户数据的隐私和安全。
-
----
-
-## 详细说明
-
-### 项目结构
-
-项目的文件和目录结构如下：
-
-- `.env`: 环境变量文件。
-- `next.config.mjs`: Next.js 的配置文件。
-- `package.json` 和 `package-lock.json`: 包含项目的依赖和脚本。
-- `public`: 包含静态文件，如图片、样式表等。
-- `src`: 包含应用程序的源代码。
-    - `app`: 包含页面组件和全局样式。
-    - `component`: 包含可复用的 UI 组件。
-    - `db`: 包含数据库操作。
-    - `middleware.ts`: 包含中间件逻辑，用于请求处理。
-    - `pages/api`: 包含 API 路由。
-    - `reducer`: 包含 Redux 状态管理切片。
-    - `store.tsx`: 包含 Redux 存储。
-    - `tools`: 包含工具函数。
-- `tsconfig.json`: TypeScript 配置文件。
-
-### 核心功能
-
-- **用户管理**: 用户可以登录和注册。中间件会检查用户的访问权限，并根据需要重定向用户。
-- **药品管理**: 用户可以添加、更新、删除和查看药品信息。
-- **库存管理**: 用户可以管理药品的库存，包括上传和更新库存信息。
-- **通知系统**: 用户可以查看系统通知。
-- **日志系统**: 记录用户的操作日志。
-
-### 中间件
-
-中间件用于检查用户的 IP 地址和 cookies 中的令牌，以确保用户有权访问特定的路由。如果用户没有权限，中间件将重定向用户到登录页面。
-
-### API 路由
-
-API 路由用于处理与药品、库存、通知等相关的请求。
-
-### 状态管理
-
-使用 Redux 进行状态管理，包含主题和用户相关的切片。
-
-### 工具函数
-
-包含 Axios 配置、JWT 处理、日志记录等工具函数，以简化开发过程。
-
-## 结论
-
-本项目是一个功能完善的药品管理系统，适用于需要管理药品信息和库存的用户。通过 Next.js 框架，项目提供了快速、可靠且安全的服务。

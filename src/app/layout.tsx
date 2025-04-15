@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { cookies } from 'next/headers'
 
-import { CustomLayout } from '@/component'
+import { CustomLayout, VChartSemiThemeProvider } from '@/component'
 import type { Menus } from '@/component/layout/type'
 import pool from '@/db/index.js'
 import { ReduxProvider } from '@/store'
@@ -13,6 +13,7 @@ import type { UserTokenType } from '@/tools/axios/type'
 import jwtService from '@/tools/jwt'
 import logger from '@/tools/logger'
 
+// initialization
 // const geistSans = localFont({
 //     src: "./fonts/GeistVF.woff",
 //     variable: "--font-geist-sans",
@@ -67,7 +68,9 @@ export default async function RootLayout({
         <html lang="Zh-CN">
             <body className={`${MiSans.variable} ${geistMono.variable}`}>
                 <ReduxProvider>
-                    <CustomLayout menus={menus}>{children}</CustomLayout>
+                    <VChartSemiThemeProvider>
+                        <CustomLayout menus={menus}>{children}</CustomLayout>
+                    </VChartSemiThemeProvider>
                 </ReduxProvider>
             </body>
         </html>

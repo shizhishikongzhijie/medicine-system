@@ -76,7 +76,7 @@ const CustomLayout: React.FC<LayoutProps> = ({ children, menus }) => {
             }
         }
         fetchData()
-    }, [])
+    }, [menus, pathname])
     useEffect(() => {
         // 设置选中的菜单项基于当前路径
         for (const [key, value] of Object.entries(ROUTER_MAP)) {

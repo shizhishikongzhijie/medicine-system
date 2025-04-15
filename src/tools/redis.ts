@@ -1,5 +1,6 @@
 // utils/redis.ts
 import Redis from 'ioredis'
+import logger from '@/tools/logger'
 
 class RedisClient {
     private static instance: RedisClient
@@ -20,6 +21,7 @@ class RedisClient {
             ),
             retryStrategy(times) {
                 // 当连接失败时的重试策略
+                logger.error('Redis connection error: time out ' + times)
                 return Math.min(times * 50, 2000)
             }
         })

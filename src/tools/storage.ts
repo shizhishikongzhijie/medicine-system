@@ -6,7 +6,7 @@ type StorageValue = string | number | boolean | object | null | []
  * 检查是否在客户端执行环境，并运行回调函数。
  * @param callback - 要在客户端环境中运行的回调函数。
  */
-function checkAndRunOnClient<T>(callback: () => T): T | null {
+export function checkAndRunOnClient<T>(callback: () => T): T | null {
     if (typeof window !== 'undefined') {
         return callback()
     }

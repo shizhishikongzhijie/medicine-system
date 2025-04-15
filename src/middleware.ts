@@ -35,7 +35,13 @@ export async function middleware(req: NextRequest) {
     }
 
     // 检查请求 URL 是否包含 '/login' 或 '/auth'，如果不包含则进行进一步检查
-    const excludedPaths = ['/login', '/auth', '/api/redis', '/api/jwt']
+    const excludedPaths = [
+        '/login',
+        '/auth',
+        '/api/redis',
+        '/api/jwt',
+        '/api/districts'
+    ]
     if (!excludedPaths.some((path) => req.url.includes(path))) {
         // 检查请求的 cookies 中是否包含 'RefreshToken'，如果没有则重定向到登录页面
         if (!req.cookies.has('RefreshToken')) {
