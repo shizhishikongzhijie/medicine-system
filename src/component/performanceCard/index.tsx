@@ -39,7 +39,7 @@ const App = () => {
         }
     }
     return (
-        <div style={{ display: 'flex', width: '100%', height: '300px' }}>
+        <div style={{ display: 'flex', width: '600px', height: '200px' }}>
             <LiquidChart
                 values={[{ value: cpuPercent }]}
                 indicatorTitle={'CPU使用率'}

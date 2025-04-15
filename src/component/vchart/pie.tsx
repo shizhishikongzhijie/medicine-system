@@ -34,6 +34,7 @@ const App = ({
             style={style}
             data={[{ id: 'id1', values: barData || [{}] }]}
             title={{ text: titleContent || '' }}
+            label={{ visible: true }}
         >
             <Legend orient={'left'} />
             <Pie

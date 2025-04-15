@@ -40,7 +40,8 @@ export async function middleware(req: NextRequest) {
         '/auth',
         '/api/redis',
         '/api/jwt',
-        '/api/districts'
+        '/api/districts',
+        '/api/performance'
     ]
     if (!excludedPaths.some((path) => req.url.includes(path))) {
         // 检查请求的 cookies 中是否包含 'RefreshToken'，如果没有则重定向到登录页面

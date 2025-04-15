@@ -16,32 +16,34 @@ const App = ({
 }) => {
     const chartRef = useRef(null)
     return (
-        <div style={{ width: '100%', height: '300px' }}>
-            <LiquidChart
-                ref={chartRef}
-                indicatorSmartInvert
-                data={[{ id: 'id0', values: values || [{ value: 0.3 }] }]}
-                title={{ text: titleContent || '' }}
-            >
-                <Liquid valueField={valueField || 'value'} />
-                <Indicator
-                    title={{
-                        visible: !!indicatorTitle,
+        <LiquidChart
+            ref={chartRef}
+            indicatorSmartInvert
+            data={{
+                id: 'data',
+                values: values
+            }}
+            title={{ text: titleContent || '' }}
+        >
+            <Liquid valueField={valueField || 'value'} />
+            <Indicator
+                title={{
+                    visible: !!indicatorTitle,
+                    style: {
+                        text: indicatorTitle,
+                        fontSize: 20
+                    }
+                }}
+                content={[
+                    {
+                        visible: !!indicatorTextContent,
                         style: {
-                            text: indicatorTitle
+                            text: indicatorTextContent
                         }
-                    }}
-                    content={[
-                        {
-                            visible: !!indicatorTextContent,
-                            style: {
-                                text: indicatorTextContent
-                            }
-                        }
-                    ]}
-                />
-            </LiquidChart>
-        </div>
+                    }
+                ]}
+            />
+        </LiquidChart>
     )
 }
 export default App
