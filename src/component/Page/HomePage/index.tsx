@@ -1,6 +1,6 @@
 'use client'
 
-import { Skeleton } from '@douyinfe/semi-ui'
+import { Divider, Skeleton } from '@douyinfe/semi-ui'
 import { useEffect, useState } from 'react'
 
 import { LineChart, PerformanceCard, PieChart } from '@/component'
@@ -60,6 +60,7 @@ const HomePage = () => {
             {/*        position: 'relative'*/}
             {/*    }}*/}
             {/*>*/}
+            <Divider margin="12px" />
             <div
                 style={{
                     display: 'grid',

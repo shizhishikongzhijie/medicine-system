@@ -103,5 +103,6 @@
         "@typescript-eslint/explicit-function-return-type": "off"
       }
     }
-  ]
+  ],
+  "ignorePatterns": ["next.config.mjs"]
 }

@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import pool from '@/db/index.js'
 import { getUid } from '@/tools/cookie'
+import { RedisClientInstance } from '@/tools/redis'
 import ResponseService from '@/tools/res'
 
 export default async function handler(
@@ -42,15 +43,51 @@ const getNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
             typeof pageSize === 'string' ? parseInt(pageSize, 10) : 5
         // 安全处理分页参数
         const offset = (pageNum - 1) * pageSizeNum
+        const uid = getUid(req, res)
         if (isRead) {
             //格式化为number
             const isReadNum = Number(isRead)
             if (isReadNum === 0 || isReadNum === 1) {
-                const query = `SELECT *
+                //从redis中获取用户未读的记录
+                await RedisClientInstance.selectDb(1)
+                const redisKey = `notifications:${uid}`
+                const isVoild = await RedisClientInstance.exists(redisKey)
+                if (isVoild) {
+                    //有则添加数据
+                    const redisResult = await RedisClientInstance.hget(
+                        redisKey,
+                        'not-read'
+                    )
+                    const query = `SELECT *
                                FROM notifications
                                WHERE is_read = ?`
-                const [result]: any[] = await pool.query(query, isReadNum)
-                return ResponseService.success(res, '查询成功', result)
+                    const [result]: any[] = await pool.query(query, [isReadNum])
+                    return ResponseService.success(
+                        res,
+                        '查询成功',
+                        result.map((item) => {
+                            return {
+                                ...item,
+                                has_read: item.id in redisResult
+                            }
+                        })
+                    )
+                } else {
+                    const query = `SELECT *
+                               FROM notifications
+                               WHERE is_read = ?`
+                    const [result]: any[] = await pool.query(query, isReadNum)
+                    return ResponseService.success(
+                        res,
+                        '查询成功',
+                        result.map((item) => {
+                            return {
+                                ...item,
+                                has_read: true
+                            }
+                        })
+                    )
+                }
             } else {
                 return ResponseService.error(res, 400, 'isRead参数错误')
             }
@@ -97,6 +134,7 @@ const addNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
         } else {
             // 获取当前登录用户的ID
             const uid = getUid(req, res)
+
             if (!uid) {
                 return ResponseService.error(res, 404, '用户未登录')
             }
@@ -107,6 +145,31 @@ const addNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
                 content,
                 uid
             ])
+            //为所有用户增加redis记录通知
+            const redisUserQuery = `SELECT id FROM users`
+            const [redisUserResult]: any[] = await pool.query(redisUserQuery)
+            for (const user of redisUserResult) {
+                const uid = user.id
+                await RedisClientInstance.selectDb(1)
+                const redisKey = `notifications:${uid}`
+                const isVoild = await RedisClientInstance.exists(redisKey)
+                if (isVoild) {
+                    //有则添加数据
+                    const result = await RedisClientInstance.hget(
+                        redisKey,
+                        'not-read'
+                    )
+                    await RedisClientInstance.hset(redisKey, 'not-read', [
+                        ...result,
+                        result.insertId
+                    ])
+                } else {
+                    //无则增加redis
+                    await RedisClientInstance.hset(redisKey, 'not-read', [
+                        result.insertId
+                    ])
+                }
+            }
             return ResponseService.success(res, '添加成功', result)
         }
     } catch (error) {

@@ -1,113 +1,78 @@
 'use client'
 import './index.css'
 
-import { IconInfoCircle } from '@douyinfe/semi-icons'
 import { Button, Input, Modal, Notification, Table } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { MedicinePopover, StockUploadForm, SupplierPopover } from '@/component'
-import type { Stock } from '@/component/Page/StockPage/type'
+import { SupplierUploadForm } from '@/component'
+import type { Supplier } from '@/component/Page/SupplierPage/type'
 import { UTCFormat } from '@/tools'
 import { NextAxios } from '@/tools/axios/NextAxios'
 import type { ResType } from '@/tools/axios/type'
 
 const columns = [
     {
-        title: '药品名',
-        width: 200,
-        dataIndex: 'medicine_name',
-        fixed: true,
-        render: (text: string, record: Stock) => {
-            return (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}
-                >
-                    <div>{text}</div>
-                    <MedicinePopover medicineId={record.medicine_id}>
-                        <IconInfoCircle />
-                    </MedicinePopover>
-                </div>
-            )
-        },
-        ellipsis: true
-    },
-    {
-        title: '入库数量',
-        width: 100,
-        dataIndex: 'quantity',
-        render: (text: number) => <div>{text}</div>,
-        ellipsis: true
-    },
-
-    {
         title: '供应商',
         width: 200,
-        dataIndex: 'supplier_name',
-        render: (text: string, record: Stock) => {
-            return (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}
-                >
-                    <div>{text}</div>
-                    <SupplierPopover supplierId={record.supplier_id}>
-                        <IconInfoCircle />
-                    </SupplierPopover>
-                </div>
-            )
+        dataIndex: 'name',
+        fixed: true,
+        render: (text: string) => {
+            return <div>{text}</div>
         },
         ellipsis: true
     },
     {
-        title: '批号',
+        title: '联系人',
+        width: 100,
+        dataIndex: 'contact_person',
+        render: (text: string) => <div>{text}</div>,
+        ellipsis: true
+    },
+    {
+        title: '联系电话',
         width: 200,
-        dataIndex: 'batch_number',
+        dataIndex: 'phone',
         render: (text: string) => {
             return <div>{text}</div>
         }
     },
     {
-        title: '生产日期',
+        title: '邮箱地址',
         width: 200,
-        dataIndex: 'production_date',
-        render: (value: string) => {
-            return <span>{UTCFormat(value)}</span>
-        }
-    },
-    {
-        title: '有效期至',
-        width: 200,
-        dataIndex: 'expiry_date',
-        render: (value: string) => {
-            return <span>{UTCFormat(value)}</span>
-        }
-    },
-    {
-        title: '备注',
-        width: 200,
-        dataIndex: 'remark',
+        dataIndex: 'email',
         render: (text: string) => {
             return <div>{text}</div>
+        },
+        ellipsis: true
+    },
+    {
+        title: '供应商地址',
+        width: 200,
+        dataIndex: 'address',
+        render: (text: string) => {
+            return <div>{text}</div>
+        },
+        ellipsis: true
+    },
+    {
+        title: '创建日期',
+        width: 200,
+        dataIndex: 'created_at',
+        render: (value: string) => {
+            return <span>{UTCFormat(value)}</span>
         }
     },
     {
-        title: '入库日期',
+        title: '更新日期',
         width: 200,
-        dataIndex: 'stock_in_date',
+        dataIndex: 'updated_at',
         render: (value: string) => {
             return <span>{UTCFormat(value)}</span>
         }
     }
 ]
-const StockPage = () => {
-    const [dataSource, setData] = useState<Stock[]>([])
+const SupplierPage = () => {
+    const [dataSource, setData] = useState<Supplier[]>([])
     const [loading, setLoading] = useState(true)
     const [searchInfo, setSearchInfo] = useState<string>('')
     const [allCount, setAllCount] = useState(0)
@@ -117,22 +82,22 @@ const StockPage = () => {
     const [index, setIndex] = useState(1)
     const [pageSize, setPageSize] = useState(5)
     const scroll = useMemo(() => ({ y: 280 }), [])
-    const StockUploadFormRef = useRef<{
+    const SupplierUploadFormRef = useRef<{
         openModal: () => void
         closeModal: () => void
-        setFormValues: (values: Stock) => void
+        setFormValues: (values: Supplier) => void
     }>()
+
     const getData = useCallback(async () => {
         const newRes: ResType = await NextAxios({
             map: 'get',
-            url: '/api/stock',
+            url: '/api/supplier',
             data: {
                 searchInfo: searchInfo,
                 index: index,
                 pageSize: pageSize
             }
         })
-
         console.log(newRes.data)
         setData(
             newRes.data.data.map((item: any) => {
@@ -144,20 +109,23 @@ const StockPage = () => {
         setAllCount(newRes.data.count)
         setLoading(false)
     }, [index, searchInfo, pageSize])
+    useEffect(() => {
+        getData()
+    }, [index, pageSize])
 
     function deleteConfirm() {
         const names =
             selectedRowKeys?.map((id: any) => {
-                const item: Stock | undefined = dataSource.find(
-                    (item: Stock) => item.key === id
+                const item: Supplier | undefined = dataSource.find(
+                    (item: Supplier) => item.key === id
                 )
-                return item?.medicine_name
+                return item?.name
             }) ?? [] // 处理 selectedRowKeys 为 null/undefined 的情况
         const validNames = names.filter((name) => name !== undefined)
         const content =
-            validNames.length > 0 ? validNames.join(', ') : '未选中任何货物'
+            validNames.length > 0 ? validNames.join(', ') : '未选中任何药品'
         Modal.confirm({
-            title: '确定删除此货物？',
+            title: '确定删除此药品？',
             content: content,
             onOk: onDelete
         })
@@ -169,7 +137,7 @@ const StockPage = () => {
         }
         const res: ResType = await NextAxios({
             map: 'delete',
-            url: '/api/stock',
+            url: '/api/medicine',
             data: {
                 ids: selectedRowKeys
             }
@@ -185,28 +153,28 @@ const StockPage = () => {
 
     const onUpdate = () => {
         const id = selectedRowKeys?.[0] as number
-        StockUploadFormRef?.current?.setFormValues(
-            dataSource.find((item: Stock) => item.key === id) as Stock
+        SupplierUploadFormRef?.current?.setFormValues(
+            dataSource.find((item: Supplier) => item.key === id) as Supplier
         )
         setLoading(true)
         getData()
     }
-    useEffect(() => {
-        getData()
-    }, [index, pageSize])
 
     return (
-        <div>
-            <StockUploadForm ref={StockUploadFormRef} callBack={getData} />
-            <div className={'stock-table-header'}>
-                <div className={'stock-table-header__left'}>
+        <>
+            <SupplierUploadForm
+                ref={SupplierUploadFormRef}
+                callBack={getData}
+            />
+            <div className={'supplier-table-header'}>
+                <div className={'supplier-table-header__left'}>
                     <Button
                         onClick={() => {
                             console.log(
-                                'StockUploadFormRef',
-                                StockUploadFormRef
+                                'SupplierUploadFormRef',
+                                SupplierUploadFormRef
                             )
-                            StockUploadFormRef?.current?.openModal()
+                            SupplierUploadFormRef?.current?.openModal()
                         }}
                     >
                         导入
@@ -226,9 +194,9 @@ const StockPage = () => {
                         更新
                     </Button>
                 </div>
-                <div className={'stock-table-header__right'}>
+                <div className={'supplier-table-header__right'}>
                     <Input
-                        placeholder={'请输入药品名'}
+                        placeholder={'请输入供应商名'}
                         value={searchInfo}
                         onChange={(value) => {
                             setSearchInfo(value)
@@ -280,7 +248,8 @@ const StockPage = () => {
                 }}
                 dataSource={dataSource}
             />
-        </div>
+        </>
     )
 }
-export default StockPage
+
+export default SupplierPage

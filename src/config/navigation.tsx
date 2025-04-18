@@ -19,7 +19,8 @@ export const initNavItems: InitNavItems[] = [
         icon: <IconInbox size="large" />,
         items: [
             { itemKey: 'Medicine', text: '药品列表' },
-            { itemKey: 'Stock', text: '入库记录' }
+            { itemKey: 'Stock', text: '入库记录' },
+            { itemKey: 'Supplier', text: '供应商列表' }
         ]
     },
     { itemKey: 'User', text: '用户管理', icon: <IconUser size="large" /> },

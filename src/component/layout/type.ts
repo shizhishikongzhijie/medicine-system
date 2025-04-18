@@ -7,6 +7,7 @@ interface Notification {
     created_by: number
     created_at: string
     is_read: 0 | 1
+    has_read?: boolean
 }
 // 定义 breadcrumbMap 的类型
 type BreadcrumbMap = {

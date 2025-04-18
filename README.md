@@ -14,7 +14,7 @@
 - 🌓 主题切换功能
 
 **技术栈**：  
-Next.js 14 | TypeScript 5 | Redux Toolkit | Semi Design | MySQL | Redis
+Next.js 14 | TypeScript 5 | Redux Toolkit | Semi Design | MySQL | Redis | Axios | 
 
 ## 功能亮点
 

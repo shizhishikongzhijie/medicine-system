@@ -1,24 +1,12 @@
 'use client'
 import { IconBell, IconHelpCircle, IconSemiLogo } from '@douyinfe/semi-icons'
-import {
-    Avatar,
-    Badge,
-    Breadcrumb,
-    Button,
-    Layout,
-    Nav,
-    Popover
-} from '@douyinfe/semi-ui'
+import { Avatar, Badge, Breadcrumb, Button, Layout, Nav, Popover } from '@douyinfe/semi-ui'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { NotificationPopover, ThemeButton } from '@/component'
-import type {
-    InitNavItems,
-    LayoutProps,
-    Notification
-} from '@/component/layout/type'
+import type { InitNavItems, LayoutProps, Notification } from '@/component/layout/type'
 import { BREADCRUMB_MAP, INIT_NAV_ITEMS, ROUTER_MAP } from '@/config'
 import { NextAxios } from '@/tools/axios/NextAxios'
 import type { ResType } from '@/tools/axios/type' // 引入 useRouter 和 usePathname
@@ -150,9 +138,16 @@ const CustomLayout: React.FC<LayoutProps> = ({ children, menus }) => {
                                 <Button
                                     theme="borderless"
                                     icon={
-                                        <Badge count={notification?.length}>
+                                        notification &&
+                                        notification.filter(
+                                            (item) => !item.has_read
+                                        ).length > 0 ? (
+                                            <Badge dot>
+                                                <IconBell size="large" />
+                                            </Badge>
+                                        ) : (
                                             <IconBell size="large" />
-                                        </Badge>
+                                        )
                                     }
                                     style={{
                                         color: 'var(--semi-color-text-2)',

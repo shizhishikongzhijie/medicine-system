@@ -47,19 +47,27 @@ const getStock = async (req: NextApiRequest, res: NextApiResponse) => {
                           AND m.name LIKE ?`
     const query = `
         SELECT m.name medicine_name,
+               su.name supplier_name,
                s.*
         FROM stock_in_records s,
-             medicines m
+             medicines m,
+             suppliers su
         WHERE medicine_id = m.id
-          AND name LIKE ?
+          AND s.supplier_id = su.id
+          AND (m.name LIKE ? 
+              OR 
+               su.name LIKE ?
+              )
         ORDER BY s.id DESC
         LIMIT ? OFFSET ?
     `
     try {
         const [countResult]: any[] = await pool.query(queryCount, [
+            `%${searchValue}%`,
             `%${searchValue}%`
         ])
         const [dataResult]: any[] = await pool.query(query, [
+            `%${searchValue}%`,
             `%${searchValue}%`,
             pageSizeNum,
             offset

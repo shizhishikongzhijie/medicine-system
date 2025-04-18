@@ -1,0 +1,16 @@
+.supplier-table-header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.supplier-table-header__left{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.supplier-table-header__right{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

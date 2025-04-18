@@ -1,7 +1,6 @@
 .message-popover {
     width: 350px;
 }
-
 .message-popover-content {
     /* 可换行 */
     white-space: pre-wrap;
