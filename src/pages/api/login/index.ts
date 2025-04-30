@@ -40,9 +40,10 @@ const Login = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     try {
         const query = `
-            SELECT password, id
-            FROM users
-            WHERE username = ?
+            SELECT u.password, u.id ,ur.role_id
+            FROM users u,user_roles ur
+            WHERE username = ? 
+            AND u.id = ur.user_id
         `
         const [rows]: any[] = await pool.query(query, [username])
 
@@ -69,7 +70,11 @@ const Login = async (req: NextApiRequest, res: NextApiResponse) => {
         `
         await pool.query(queryLog, [id, getIp(req) || '未知'])
         logger.info(`User ${id} logged in ${getIp(req) || '未知'}`)
-        const payload = { id: rows[0].id, username: username }
+        const payload = {
+            id: rows[0].id,
+            username: username,
+            role_id: rows[0].role_id
+        }
         const accessToken = jwtService.generateToken(payload, {
             expiresIn: '1h'
         })

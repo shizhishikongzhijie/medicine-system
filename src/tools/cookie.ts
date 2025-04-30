@@ -9,7 +9,7 @@ import logger from '@/tools/logger'
 export async function getUid(req: NextApiRequest, res: NextApiResponse) {
     const cookies = parseCookies({ req })
     let token = cookies.AccessToken
-    let uid
+    let uid: number = -1
     // 检查请求的 cookies 中是否包含 'AccessToken'，如果没有则尝试从 'RefreshToken' 中获取
     if (!token) {
         token = cookies.RefreshToken

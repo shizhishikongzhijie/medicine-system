@@ -48,9 +48,10 @@ export default async function RootLayout({
     const token = tokenCookies?.value // 提取第一个 Cookie 的 value
     logger.info('cookie:', { token: token })
     let menus: Menus[] | undefined = undefined
+    let user: UserTokenType
     if (token && !jwtService.isTokenExpired(token)) {
         try {
-            const user: UserTokenType = jwtService.verifyToken(token) // 验证 Token
+            user = jwtService.verifyToken(token) // 验证 Token
             console.log('Token 验证成功:', user)
             menus = await getMenusPool(user.id)
             logger.info('getMenusSync result:', menus)
@@ -69,7 +70,9 @@ export default async function RootLayout({
             <body className={`${MiSans.variable} ${geistMono.variable}`}>
                 <ReduxProvider>
                     <VChartSemiThemeProvider>
-                        <CustomLayout menus={menus}>{children}</CustomLayout>
+                        <CustomLayout menus={menus} user={user}>
+                            {children}
+                        </CustomLayout>
                     </VChartSemiThemeProvider>
                 </ReduxProvider>
             </body>

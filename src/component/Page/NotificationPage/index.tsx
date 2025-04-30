@@ -1,14 +1,15 @@
 'use client'
 import './index.css'
 
-import { Button, Input, Table, Tag } from '@douyinfe/semi-ui'
+import { Button, Divider, Input, Table, Tag } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import type { Medicine } from '@/component/Page/MedicinePage/type'
 import type { NotificationUser } from '@/component/Page/NotificationPage/type'
+import type { RootState } from '@/store'
 import { UTCFormat } from '@/tools'
 import { NextAxios } from '@/tools/axios/NextAxios'
-import type { ResType } from '@/tools/axios/type'
+import type { ResType, UserTokenType } from '@/tools/axios/type'
 
 import NotificationUploadForm from '../../notificationUploadForm'
 
@@ -39,15 +40,21 @@ const columns = [
         }
     },
     {
-        title: '是否展示',
-        width: 100,
+        title: '是否展示/已读',
+        width: 200,
         dataIndex: 'is_read',
-        render: (text: number) => {
+        render: (text: number, record: NotificationUser) => {
             return (
-                <Tag color={text === 0 ? 'green' : 'red'}>
-                    {' '}
-                    {text === 0 ? '展示' : '禁止'}{' '}
-                </Tag>
+                <>
+                    <Tag color={text === 0 ? 'green' : 'red'}>
+                        {' '}
+                        {text === 0 ? '展示' : '禁止'}{' '}
+                    </Tag>
+                    <Divider layout="vertical" margin="12px" />
+                    <Tag color={record.has_read ? 'green' : 'yellow'}>
+                        {record.has_read ? '已读' : '未读'}
+                    </Tag>
+                </>
             )
         },
         ellipsis: true
@@ -67,6 +74,11 @@ const NotificationPage = () => {
     const [loading, setLoading] = useState(true)
     const [searchInfo, setSearchInfo] = useState<string>('')
     const [allCount, setAllCount] = useState(0)
+    const user = useSelector((state: RootState) => state.user)
+
+    const [userToken, setUserToken] = useState<UserTokenType | null>(
+        user && typeof user === 'object' ? { ...user, id: user.uid } : null
+    )
     const [selectedRowKeys, setSelectedRowKeys] = useState<
         (string | number)[] | undefined
     >([])
@@ -76,7 +88,7 @@ const NotificationPage = () => {
     const NotificationUploadRef = useRef<{
         openModal: () => void
         closeModal: () => void
-        setFormValues: (values: Medicine) => void
+        setFormValues: (values: NotificationUser) => void
     }>()
     const getData = useCallback(() => {
         const fetchData = async () => {
@@ -102,6 +114,16 @@ const NotificationPage = () => {
         }
         fetchData().then(() => setLoading(false))
     }, [index, searchInfo, pageSize])
+    const onUpdate = () => {
+        const id = selectedRowKeys?.[0] as number
+        NotificationUploadRef?.current?.setFormValues(
+            dataSource.find(
+                (item: NotificationUser) => item.key === id
+            ) as NotificationUser
+        )
+        setLoading(true)
+        getData()
+    }
     useEffect(() => {
         getData()
     }, [index, pageSize])
@@ -111,46 +133,54 @@ const NotificationPage = () => {
                 ref={NotificationUploadRef}
                 callBack={getData}
             />
-            <div className={'notification-table-header'}>
-                <div className={'notification-table-header__left'}>
-                    <Button
-                        onClick={() => {
-                            NotificationUploadRef?.current?.openModal()
-                        }}
-                    >
-                        导入
-                    </Button>
-                    <Button
-                        disabled={
-                            !(selectedRowKeys && selectedRowKeys?.length > 0)
-                        }
-                    >
-                        删除
-                    </Button>
-                    <Button disabled={selectedRowKeys?.length != 1}>
-                        更新
-                    </Button>
+            {userToken?.role_id === 3 && (
+                <div className={'notification-table-header'}>
+                    <div className={'notification-table-header__left'}>
+                        <Button
+                            onClick={() => {
+                                NotificationUploadRef?.current?.openModal()
+                            }}
+                        >
+                            导入
+                        </Button>
+                        <Button
+                            disabled={
+                                !(
+                                    selectedRowKeys &&
+                                    selectedRowKeys?.length > 0
+                                )
+                            }
+                        >
+                            删除
+                        </Button>
+                        <Button
+                            disabled={selectedRowKeys?.length != 1}
+                            onClick={onUpdate}
+                        >
+                            更新
+                        </Button>
+                    </div>
+                    <div className={'notification-table-header__right'}>
+                        <Input
+                            placeholder={'请输入信息'}
+                            value={searchInfo}
+                            onChange={(value) => {
+                                setSearchInfo(value)
+                            }}
+                        />
+                        <Button
+                            onClick={() => {
+                                console.log('searchInfo', searchInfo)
+                                setLoading(true)
+                                setIndex(1)
+                                getData()
+                            }}
+                        >
+                            搜索
+                        </Button>
+                    </div>
                 </div>
-                <div className={'notification-table-header__right'}>
-                    <Input
-                        placeholder={'请输入信息'}
-                        value={searchInfo}
-                        onChange={(value) => {
-                            setSearchInfo(value)
-                        }}
-                    />
-                    <Button
-                        onClick={() => {
-                            console.log('searchInfo', searchInfo)
-                            setLoading(true)
-                            setIndex(1)
-                            getData()
-                        }}
-                    >
-                        搜索
-                    </Button>
-                </div>
-            </div>
+            )}
             <Table
                 loading={loading}
                 columns={columns}

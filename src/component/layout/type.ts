@@ -1,6 +1,9 @@
 import type React from 'react'
 
+import type { UserTokenType } from '@/tools/axios/type'
+
 interface Notification {
+    key?: string | number
     id: number
     title: string
     content: string
@@ -9,6 +12,7 @@ interface Notification {
     is_read: 0 | 1
     has_read?: boolean
 }
+
 // 定义 breadcrumbMap 的类型
 type BreadcrumbMap = {
     [key: string]: string[]
@@ -17,6 +21,7 @@ type BreadcrumbMap = {
 interface LayoutProps {
     children: React.ReactNode
     menus?: Menus[]
+    user?: UserTokenType
 }
 
 interface Menus {
@@ -25,6 +30,7 @@ interface Menus {
     url: string
     parentId: number
 }
+
 interface InitNavItems {
     itemKey: string
     text: string

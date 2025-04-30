@@ -23,6 +23,7 @@
     "mysql2": "^3.12.0",
     "next": "^14.3.0-canary.44",
     "nookies": "^2.5.2",
+    "prom-client": "^15.1.3",
     "react": "^18",
     "react-dom": "^18",
     "react-redux": "^9.2.0",

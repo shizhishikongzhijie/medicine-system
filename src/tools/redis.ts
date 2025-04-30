@@ -1,5 +1,6 @@
 // utils/redis.ts
 import Redis from 'ioredis'
+
 import logger from '@/tools/logger'
 
 class RedisClient {
@@ -14,7 +15,7 @@ class RedisClient {
         this.redisClient = new Redis({
             host: process.env.REDIS_HOST || '127.0.0.1',
             port: parseInt(process.env.REDIS_PORT || '6379'),
-            password: process.env.REDIS_PASSWORD || '123456',
+            password: process.env.REDIS_PASSWORD || '',
             db: parseInt(process.env.REDIS_DB || '0'), // 默认使用配置文件中的 DB
             connectTimeout: parseInt(
                 process.env.REDIS_CONNECT_TIMEOUT || '3000'
@@ -97,7 +98,7 @@ class RedisClient {
     public async exists(key: string): Promise<boolean> {
         try {
             const result = await this.redisClient.exists(key)
-            return result === 1
+            return result !== 1
         } catch (error) {
             console.error('Redis exists error:', error)
             throw error

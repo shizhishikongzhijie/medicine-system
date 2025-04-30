@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+import type { NotificationUser } from '@/component/Page/NotificationPage/type'
 import pool from '@/db/index.js'
 import { getUid } from '@/tools/cookie'
+import logger from '@/tools/logger'
 import { RedisClientInstance } from '@/tools/redis'
 import ResponseService from '@/tools/res'
 
@@ -14,8 +16,8 @@ export default async function handler(
             return getNotifications(req, res)
         case 'POST':
             return addNotifications(req, res)
-        // case 'PATCH':
-        //     return updateNotifications(req, res);
+        case 'PATCH':
+            return updateNotifications(req, res)
         // case 'DELETE':
         //     return deleteNotifications(req, res);
         default:
@@ -43,24 +45,29 @@ const getNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
             typeof pageSize === 'string' ? parseInt(pageSize, 10) : 5
         // 安全处理分页参数
         const offset = (pageNum - 1) * pageSizeNum
-        const uid = getUid(req, res)
+        const uid = await getUid(req, res)
+        if (uid === -1) {
+            return ResponseService.error(res, 404, '用户未登录')
+        }
+        const redisKey = `notifications:${uid}`
+        const isVoild = await RedisClientInstance.exists(redisKey)
+
         if (isRead) {
             //格式化为number
             const isReadNum = Number(isRead)
             if (isReadNum === 0 || isReadNum === 1) {
                 //从redis中获取用户未读的记录
                 await RedisClientInstance.selectDb(1)
-                const redisKey = `notifications:${uid}`
-                const isVoild = await RedisClientInstance.exists(redisKey)
-                if (isVoild) {
+                if (!isVoild) {
                     //有则添加数据
-                    const redisResult = await RedisClientInstance.hget(
+                    let redisResult: number[] | null = []
+                    redisResult = await RedisClientInstance.hget(
                         redisKey,
                         'not-read'
                     )
                     const query = `SELECT *
-                               FROM notifications
-                               WHERE is_read = ?`
+                                   FROM notifications
+                                   WHERE is_read = ?`
                     const [result]: any[] = await pool.query(query, [isReadNum])
                     return ResponseService.success(
                         res,
@@ -68,14 +75,15 @@ const getNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
                         result.map((item) => {
                             return {
                                 ...item,
-                                has_read: item.id in redisResult
+                                has_read: !redisResult?.includes(item.id)
                             }
                         })
                     )
                 } else {
+                    //没有则增加所有
                     const query = `SELECT *
-                               FROM notifications
-                               WHERE is_read = ?`
+                                   FROM notifications
+                                   WHERE is_read = ?`
                     const [result]: any[] = await pool.query(query, isReadNum)
                     return ResponseService.success(
                         res,
@@ -116,13 +124,25 @@ const getNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
                 pageSizeNum,
                 offset
             ])
+            let redisResult: number[] | null = []
+            if (!isVoild) {
+                redisResult = await RedisClientInstance.hget(
+                    redisKey,
+                    'not-read'
+                )
+            }
             return ResponseService.success(res, '查询成功', {
                 count: countResult[0].count,
-                data: dataResult
+                data: dataResult.map((item) => {
+                    return {
+                        ...item,
+                        has_read: redisResult && !redisResult.includes(item.id)
+                    }
+                })
             })
         }
     } catch (error) {
-        console.error('Error fetching Notifications:', error)
+        logger.error('Error fetching Notifications:', error)
         return ResponseService.error(res, 400, String(error))
     }
 }
@@ -133,9 +153,9 @@ const addNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
             return ResponseService.error(res, 400, '参数错误')
         } else {
             // 获取当前登录用户的ID
-            const uid = getUid(req, res)
+            const uid = await getUid(req, res)
 
-            if (!uid) {
+            if (uid === -1) {
                 return ResponseService.error(res, 404, '用户未登录')
             }
             const query = `INSERT INTO notifications (title, content, created_by)
@@ -146,7 +166,8 @@ const addNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
                 uid
             ])
             //为所有用户增加redis记录通知
-            const redisUserQuery = `SELECT id FROM users`
+            const redisUserQuery = `SELECT id
+                                    FROM users`
             const [redisUserResult]: any[] = await pool.query(redisUserQuery)
             for (const user of redisUserResult) {
                 const uid = user.id
@@ -173,6 +194,54 @@ const addNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
             return ResponseService.success(res, '添加成功', result)
         }
     } catch (error) {
-        console.error('Error fetching Notifications:', error)
+        logger.error('Error fetching Notifications:', error)
+        return ResponseService.error(res, 400, String(error))
+    }
+}
+
+const updateNotifications = async (
+    req: NextApiRequest,
+    res: NextApiResponse
+) => {
+    const { title, content, is_read, id }: NotificationUser = req.body
+    const query = `UPDATE notifications
+                   SET title   = ?,
+                       content = ?,
+                       is_read = ?
+                   WHERE id = ?`
+    try {
+        const uid = await getUid(req, res)
+        if (uid === -1) {
+            return ResponseService.error(res, 404, '用户未登录')
+        }
+        const redisKey = `notifications:${uid}`
+        const isVoild = await RedisClientInstance.exists(redisKey)
+
+        const [result]: any[] = await pool.query(query, [
+            title,
+            content,
+            is_read,
+            id
+        ])
+        if (is_read) {
+            //展示
+            if (!isVoild) {
+                //拥有redis
+                const redisResult: number[] | null =
+                    await RedisClientInstance.hget(redisKey, 'not-read')
+                if (!redisResult?.includes(id)) {
+                    await RedisClientInstance.hset(redisKey, 'not-read', [
+                        ...(redisResult ?? []),
+                        id
+                    ])
+                }
+            } else {
+                await RedisClientInstance.hset(redisKey, 'not-read', [id])
+            }
+        }
+        return ResponseService.success(res, '更新成功', result)
+    } catch (error) {
+        logger.error('Error fetching Notifications:', error)
+        return ResponseService.error(res, 400, String(error))
     }
 }

@@ -7,6 +7,7 @@ interface ResType {
 interface UserTokenType {
     id: number
     username: string
+    role_id: number
     iat: number
     exp: number
 }

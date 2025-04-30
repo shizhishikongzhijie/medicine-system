@@ -1,5 +1,5 @@
 'use client'
-import { Form, Modal, Notification } from '@douyinfe/semi-ui'
+import { Form, Modal, Notification, Switch } from '@douyinfe/semi-ui'
 import type { FormApi } from '@douyinfe/semi-ui/lib/es/form'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 
@@ -23,11 +23,12 @@ const NotificationUploadForm = forwardRef(
 
         const handleOk = () => {
             const values = formApiRef.current?.getValues()
+            values.is_read = showChecked ? 0 : 1
             if (axiosPost) {
                 const getData = async () => {
                     const res: ResType = await NextAxios({
                         map: 'post',
-                        url: '/api/notification',
+                        url: '/api/notifications',
                         data: values
                     })
                     if (res.code === 200) {
@@ -43,7 +44,7 @@ const NotificationUploadForm = forwardRef(
                 const getData = async () => {
                     const res: ResType = await NextAxios({
                         map: 'patch',
-                        url: '/api/notification',
+                        url: '/api/notifications',
                         data: { ...values, id: initialValues.current.key }
                     })
                     if (res.code === 200) {
@@ -88,7 +89,7 @@ const NotificationUploadForm = forwardRef(
                         delete cleanedValues[key]
                     }
                 })
-                setShowChecked(false)
+                setShowChecked(cleanedValues.is_read === 0)
                 setAxiosPost(false)
                 setFormInitialValues(cleanedValues)
                 setModalVisible(true)
@@ -137,12 +138,20 @@ const NotificationUploadForm = forwardRef(
                             // {validator: (rule, value) => value === 'semi', message: 'should be semi'}
                         ]}
                     />
-                    <Form.Switch
-                        field="is_read"
-                        label="是否展示"
-                        checked={showChecked}
-                        onChange={setShowChecked}
-                    />
+                    <div
+                        style={{
+                            marginTop: 20,
+                            display: 'flex',
+                            justifyContent: 'flex-start'
+                        }}
+                    >
+                        <Form.Label>是否展示</Form.Label>
+                        <Switch
+                            // label="是否展示"
+                            checked={showChecked}
+                            onChange={setShowChecked}
+                        />
+                    </div>
                 </Form>
             </Modal>
         )
