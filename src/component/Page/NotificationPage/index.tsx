@@ -102,7 +102,6 @@ const NotificationPage = () => {
                 }
             })
             const newRes = res.data
-            console.log(newRes.data)
             setData(
                 newRes?.data.map((item: any) => {
                     item.key = item.id

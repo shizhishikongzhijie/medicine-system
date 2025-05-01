@@ -8,20 +8,30 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const { id } = req.query || req.body
+    const { id } = req.body
     if (!id) {
         return ResponseService.error(res, 400, '参数错误')
     }
-    const uid = getUid(req, res)
-    await RedisClientInstance.selectDb(1)
+    const uid = await getUid(req, res)
     const redisKey = `notifications:${uid}`
     try {
         //查看通知
-        const isVoild = await RedisClientInstance.exists(redisKey)
-        if (isVoild) {
-            const result = await RedisClientInstance.hget(redisKey, 'not-read')
-            result.filter((item: any) => item !== id)
-            await RedisClientInstance.hset(redisKey, 'not-read', result)
+        await RedisClientInstance.selectDb(1)
+        const isHas = await RedisClientInstance.hexists(redisKey, 'not-read')
+        console.log('isHas:' + isHas)
+        if (isHas) {
+            let result: number[] | null = await RedisClientInstance.hget(
+                redisKey,
+                'not-read'
+            )
+            result = result?.filter((item: any) => item !== id) || []
+            console.log(`result 类型是数组: ${Array.isArray(result)} ${result}`) // 修复行
+            //if (result.length === 0) {
+            //    console.log('删除成功')
+            //    await RedisClientInstance.hdel(redisKey, 'not-read')
+            //} else {
+            await RedisClientInstance.hset(redisKey, 'not-read', [...result])
+            //}
         }
         return ResponseService.success(res, '查看成功')
     } catch (error) {

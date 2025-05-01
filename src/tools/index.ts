@@ -5,6 +5,10 @@ import { toZonedTime } from 'date-fns-tz'
 import type { NextApiRequest } from 'next'
 import type { NextRequest } from 'next/server'
 
+import type { Menus } from '@/component/layout/type'
+import { initNavItems } from '@/config/navigation'
+import { routerMap } from '@/config/routes'
+
 /**
  * 将UTC时间字符串转换为指定时区的时间格式
  * @param utcTimeString UTC时间字符串，表示需要转换的时间
@@ -124,4 +128,57 @@ function isValidIp(ip: string): boolean {
     const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/
     const ipv6Regex = /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$/
     return ipv4Regex.test(ip) || ipv6Regex.test(ip)
+}
+// 构建最终菜单函数
+type MenuItem = {
+    id: number
+    key: number
+    name: string
+    path: string
+    icon?: React.ReactNode
+    children?: MenuItem[]
+}
+
+export function buildMenu(rawMenuData: Menus[]): MenuItem[] {
+    // 创建原始数据的 map，方便通过 name 快速查找
+    const menuMap = new Map<string, Menus[][number]>(
+        rawMenuData.map((item) => [item.name, item])
+    )
+
+    return initNavItems.map((navItem) => {
+        // 找到对应名称的原始数据项
+        const rawData = menuMap.get(navItem.text)
+        const id = rawData?.id ?? Math.random() // 如果没找到用随机数代替
+        const url = rawData?.url ?? '#'
+
+        const menuItem: MenuItem = {
+            id,
+            key: id,
+            name: navItem.text,
+            path: url,
+            icon: navItem.icon,
+            children: []
+        }
+
+        if (navItem.items && navItem.items.length > 0) {
+            menuItem.children = navItem.items
+                .map((subNavItem) => {
+                    const subRawData = menuMap.get(subNavItem.text)
+                    const subId = subRawData?.id ?? Math.random()
+                    return {
+                        id: subId,
+                        key: subId,
+                        name: subNavItem.text,
+                        path:
+                            routerMap[
+                                subNavItem.itemKey as keyof typeof routerMap
+                            ] || '#',
+                        icon: null
+                    }
+                })
+                .filter(Boolean)
+        }
+
+        return menuItem
+    })
 }

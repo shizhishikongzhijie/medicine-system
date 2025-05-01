@@ -1,9 +1,10 @@
 'use client'
 
-import { IconHome, IconSafe } from '@douyinfe/semi-icons'
-import { Table } from '@douyinfe/semi-ui'
+import { Spin, Table } from '@douyinfe/semi-ui'
 import { useEffect, useState } from 'react'
 
+import type { Menus } from '@/component/layout/type'
+import { buildMenu } from '@/tools'
 import { NextAxios } from '@/tools/axios/NextAxios'
 import type { ResType } from '@/tools/axios/type'
 
@@ -26,6 +27,7 @@ const columns = [
 ]
 const MenuPage = () => {
     const [dataSource, setDataSource] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
         const fetchRoleMenus = async () => {
             const res: ResType = await NextAxios({
@@ -33,44 +35,21 @@ const MenuPage = () => {
                 map: 'get'
             })
             if (res.code === 200) {
-                console.log(res.data)
+                const menu: Menus[] = res.data
+                setDataSource(buildMenu(menu))
+                setLoading(false)
             }
         }
         fetchRoleMenus()
-        setDataSource([
-            {
-                id: 1,
-                key: 1,
-                name: '首页',
-                path: '/home',
-                icon: <IconHome size="large" />
-            },
-            {
-                id: 2,
-                key: 2,
-                name: '角色管理',
-                path: '/root',
-                icon: <IconSafe size="large" />,
-                children: [
-                    {
-                        id: 3,
-                        key: 3,
-                        name: '权限管理',
-                        path: '/permission',
-                        icon: <IconHome size="large" />
-                    }
-                ]
-            }
-        ])
     }, [])
     return (
-        <div>
+        <Spin size="large" spinning={loading}>
             <Table
                 columns={columns}
                 defaultExpandAllRows
                 dataSource={dataSource}
             />
-        </div>
+        </Spin>
     )
 }
 export default MenuPage

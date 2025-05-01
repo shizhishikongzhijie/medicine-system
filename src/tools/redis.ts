@@ -98,7 +98,7 @@ class RedisClient {
     public async exists(key: string): Promise<boolean> {
         try {
             const result = await this.redisClient.exists(key)
-            return result !== 1
+            return result === 1
         } catch (error) {
             console.error('Redis exists error:', error)
             throw error
@@ -123,6 +123,28 @@ class RedisClient {
             return this.deserialize(value)
         } catch (error) {
             console.error('Redis hget error:', error)
+            throw error
+        }
+    }
+
+    // 在 RedisClient 类中新增 hdel 方法
+    public async hdel(key: string, field: string): Promise<void> {
+        try {
+            await this.redisClient.hdel(key, field)
+        } catch (error) {
+            console.error('Redis hdel error:', error)
+            throw error
+        }
+    }
+
+    // 检查键是否存在
+    public async hexists(key: string, field: string): Promise<boolean> {
+        try {
+            const result = await this.redisClient.hexists(key, field)
+            console.log(`Redis hdel exists ${result}`)
+            return result === 1
+        } catch (error) {
+            console.error('Redis exists error:', error)
             throw error
         }
     }

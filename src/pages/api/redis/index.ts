@@ -34,8 +34,8 @@ const getRedis = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
         await RedisClientInstance.selectDb(db)
-        const isVoild = await RedisClientInstance.exists(key)
-        if (isVoild) {
+        const isHas = await RedisClientInstance.exists(key)
+        if (!isHas) {
             return ResponseService.error(res, 404, 'Key not found')
         }
         const result = await RedisClientInstance.get(key) // 确保传递给 Redis 的键为字符串

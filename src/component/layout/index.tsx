@@ -35,11 +35,14 @@ const CustomLayout: React.FC<LayoutProps> = ({ children, menus, user }) => {
     const [selectedKey, setSelectedKey] = useState('Home')
     const [notification, setNotification] = useState<Notification[]>()
     const dispatch = useDispatch<AppDispatch>()
-    dispatch(updateUserData(user))
+
     useEffect(() => {
         //console.log("menus: " + JSON.stringify(menus));
         if (pathname && pathname.startsWith('/login')) {
             return
+        }
+        if (user) {
+            dispatch(updateUserData(user))
         }
         //更改菜单（初始化）
         if (menus) {
@@ -148,6 +151,7 @@ const CustomLayout: React.FC<LayoutProps> = ({ children, menus, user }) => {
                                 content={
                                     <NotificationPopover
                                         dataSource={notification}
+                                        setData={setNotification}
                                     />
                                 }
                                 position={'bottomRight'}
@@ -198,7 +202,7 @@ const CustomLayout: React.FC<LayoutProps> = ({ children, menus, user }) => {
             {pathname && pathname.startsWith('/login') ? (
                 <>{children}</>
             ) : (
-                <Layout>
+                <Layout style={{ height: 'calc(100% - 60px)' }}>
                     <Sider
                         style={{ backgroundColor: 'var(--semi-color-bg-1)' }}
                     >
@@ -245,7 +249,8 @@ const CustomLayout: React.FC<LayoutProps> = ({ children, menus, user }) => {
                     <Content
                         style={{
                             padding: '24px',
-                            backgroundColor: 'var(--semi-color-bg-0)'
+                            backgroundColor: 'var(--semi-color-bg-0)',
+                            overflow: 'auto'
                         }}
                     >
                         <Breadcrumb

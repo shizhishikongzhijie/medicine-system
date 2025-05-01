@@ -5,14 +5,23 @@ import { useEffect, useState } from 'react'
 
 import type { Notification } from '@/component/layout/type'
 import { NextAxios } from '@/tools/axios/NextAxios'
-import { ResType } from '@/tools/axios/type'
+import type { ResType } from '@/tools/axios/type'
 
 interface NotificationPopoverProps {
     dataSource?: Notification[]
+    setData?: (
+        value:
+            | ((
+                  prevState: Notification[] | undefined
+              ) => Notification[] | undefined)
+            | Notification[]
+            | undefined
+    ) => void
 }
 
 const NotificationPopover: React.FC<NotificationPopoverProps> = ({
-    dataSource
+    dataSource,
+    setData
 }) => {
     const [dataSourceDot, setDataSourceDot] = useState<boolean[]>([])
 
@@ -37,6 +46,11 @@ const NotificationPopover: React.FC<NotificationPopoverProps> = ({
             setDataSourceDot((prevDots) =>
                 prevDots.map((dot, i) => (i === index ? true : dot))
             )
+            setData?.((prevData) =>
+                prevData?.map((item) =>
+                    item.id === id ? { ...item, has_read: true } : item
+                )
+            )
         }
     }
     return (
@@ -48,7 +62,7 @@ const NotificationPopover: React.FC<NotificationPopoverProps> = ({
                 <List.Item
                     main={
                         <Collapsible isOpen={!dataSourceDot[index]}>
-                            <div onClick={() => fetchRead(item.id,index)}>
+                            <div onClick={() => fetchRead(item.id, index)}>
                                 <span
                                     style={{
                                         color: 'var(--semi-color-text-0)',
