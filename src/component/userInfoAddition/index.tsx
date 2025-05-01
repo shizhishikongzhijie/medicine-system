@@ -19,6 +19,9 @@ interface UserInfoAdditionProps {
 const UserInfoAddition = forwardRef((props: UserInfoAdditionProps, ref) => {
     const { onBack, onComplete } = props
     const [addressData, setAddressData] = useState<CascaderData[]>([])
+    const [validateStatus, setValidateStatus] = useState<'error' | 'default'>(
+        'default'
+    )
     const [userInfo, setUserInfo] = useState<User>({
         address_code: '',
         birth_date: '',
@@ -56,6 +59,21 @@ const UserInfoAddition = forwardRef((props: UserInfoAdditionProps, ref) => {
         }
         fetchData()
     }, [])
+
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            const cPattern =
+                /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0[1-9]|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/
+            setValidateStatus(
+                cPattern.test(userInfo.id_number) ? 'default' : 'error'
+            )
+        }, 500)
+
+        return () => {
+            clearTimeout(timerId)
+        }
+    }, [userInfo])
+
     //验证身份信息 方法
     const handleSubmit = () => {
         // const data = {
@@ -187,6 +205,7 @@ const UserInfoAddition = forwardRef((props: UserInfoAdditionProps, ref) => {
                             }
                         })
                     }}
+                    validateStatus={validateStatus}
                     placeholder={'请输入身份证号'}
                 />
                 <Button type="primary" onClick={handleSubmit}>
