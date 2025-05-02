@@ -7,7 +7,6 @@ import { NextResponse } from 'next/server'
 // 从工具模块导入获取客户端 IP 地址的函数
 import { getIp } from '@/tools'
 import { MiddleAxios } from '@/tools/axios/MiddleAxios'
-// import { httpRequestDurationMicroseconds } from '@/tools/httpRequestDurationMicroseconds'
 
 // 定义白名单 IP 地址列表，这些 IP 地址可以绕过中间件检查
 const allowedIPs: string[] = ['192.168.1.1', '127.0.0.1', '::1'] // 你的白名单列表
@@ -15,7 +14,7 @@ const allowedIPs: string[] = ['192.168.1.1', '127.0.0.1', '::1'] // 你的白名
 // 导出异步中间件函数，用于处理每个请求
 export async function middleware(req: NextRequest) {
     // 获取客户端 IP 地址
-    //const start = Date.now()
+    const start = Date.now()
     const clientIp: string | undefined = getIp(req)
     const url = process.env.BASE_URL
     const setCookieAccessTokenConfig = {
@@ -41,9 +40,11 @@ export async function middleware(req: NextRequest) {
         '/login',
         '/auth',
         '/api/redis',
+        '/api/metrics',
         '/api/jwt',
         '/api/districts',
-        '/api/performance'
+        '/api/performance',
+        '/api/httpHistogram'
     ]
     if (!excludedPaths.some((path) => req.url.includes(path))) {
         // 检查请求的 cookies 中是否包含 'RefreshToken'，如果没有则重定向到登录页面
@@ -121,8 +122,23 @@ export async function middleware(req: NextRequest) {
             secure: false // 根据环境变量决定是否开启安全属性
         })
     }
-    // const duration = (Date.now() - start) / 1000
-    //
+    const duration = (Date.now() - start) / 1000
+    if (
+        req.nextUrl.pathname !== '/api/httpHistogram' &&
+        req.nextUrl.pathname !== '/api/metrics'
+    ) {
+        await MiddleAxios({
+            url: url + '/api/httpHistogram',
+            map: 'post',
+            data: {
+                method: req.method,
+                route: req.nextUrl.pathname,
+                status: res.status.toString(),
+                duration: duration
+            }
+        })
+    }
+
     // httpRequestDurationMicroseconds
     //     .labels({
     //         method: req.method,
