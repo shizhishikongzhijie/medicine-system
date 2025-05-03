@@ -6,6 +6,7 @@ interface User {
     birth_date: string
     id_number: string
     address_code: string
+    avatar_path: string
     created_at: string
     updated_at: string
 }

@@ -1,7 +1,7 @@
 'use client'
 import './index.css'
 
-import { Button, Input, Table } from '@douyinfe/semi-ui'
+import { Button, Image, Input, Table } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import type { UserInfo } from '@/component/Page/LoginPage/type'
@@ -18,6 +18,15 @@ const columns = [
         fixed: true,
         render: (text: string) => {
             return <div>{text}</div>
+        },
+        ellipsis: true
+    },
+    {
+        title: '头像',
+        width: 200,
+        dataIndex: 'avatar_path',
+        render: (text: string) => {
+            return <Image width={100} height={100} src={`http://localhost:9090${text}`} alt={text} />
         },
         ellipsis: true
     },
