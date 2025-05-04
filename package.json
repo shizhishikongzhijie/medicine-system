@@ -33,9 +33,9 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
-    "@douyinfe/semi-icons": "^2.73.0",
-    "@douyinfe/semi-illustrations": "^2.73.0",
-    "@douyinfe/semi-ui": "^2.74.0",
+    "@douyinfe/semi-icons": "^2.78.0",
+    "@douyinfe/semi-illustrations": "^2.78.0",
+    "@douyinfe/semi-ui": "^2.78.0",
     "@eslint/eslintrc": "^3.3.1",
     "@types/axios": "^0.14.4",
     "@types/busboy": "^1.5.4",
