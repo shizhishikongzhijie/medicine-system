@@ -11,10 +11,10 @@ export default async function handler(
     switch (req.method) {
         case 'GET':
             return getUserInfo(req, res)
-        // case 'PATCH':
-        //     return updateUserInfo(req, res);
-        // case 'DELETE':
-        //     return deleteUserInfo(req, res);
+        case 'PATCH':
+            return updateUserInfo(req, res)
+        case 'DELETE':
+            return deleteUserInfo(req, res)
         default:
             return res.status(405).end(`Method ${req.method} Not Allowed`)
     }
@@ -94,6 +94,66 @@ const getUserInfo = async (req: NextApiRequest, res: NextApiResponse) => {
         })
     } catch (error) {
         logger.error('Error fetching user:', error)
+        return ResponseService.error(res, 400, String(error))
+    }
+}
+
+const updateUserInfo = async (req: NextApiRequest, res: NextApiResponse) => {
+    const { id, username, avatar_path } = req.body
+    if (!id || !username || !avatar_path) {
+        return ResponseService.info(res, 400, 'Invalid parameters')
+    }
+    console.log('Received user information:', req.body)
+    const query = `
+        UPDATE users
+        SET username = ?,
+            avatar_path = ?
+        WHERE id = ?
+    `
+    try {
+        const [result]: any[] = await pool.query(query, [
+            username,
+            avatar_path,
+            id
+        ])
+        return ResponseService.success(res, '更新成功', result)
+    } catch (error) {
+        logger.error('Error fetching user:', error)
+        return ResponseService.error(res, 400, String(error))
+    }
+}
+const deleteUserInfo = async (req: NextApiRequest, res: NextApiResponse) => {
+    const { ids } = req.body
+    const idsParam = ids as (string | number)[]
+    let numericIds: number[]
+
+    // 将参数转换为数字数组并验证
+    if (Array.isArray(idsParam)) {
+        numericIds = idsParam.map((id) => parseInt(id as string, 10))
+    } else {
+        return ResponseService.info(res, 400, 'Invalid ids parameter')
+    }
+
+    // 验证ID有效性
+    if (numericIds.some((id) => isNaN(id)) || numericIds.length === 0) {
+        return ResponseService.info(res, 400, 'Invalid or empty ids')
+    }
+
+    // 动态生成IN子句的占位符
+    const placeholders = numericIds.map(() => '?').join(', ')
+    const query = `
+        DELETE
+        FROM users
+        WHERE id IN (${placeholders})
+    `
+
+    try {
+        const result = await pool.query(query, numericIds)
+        return ResponseService.success(res, 'Medicine deleted successfully', {
+            affectedRows: result
+        })
+    } catch (error) {
+        console.error('Error deleting medicine:', error)
         return ResponseService.error(res, 400, String(error))
     }
 }

@@ -39,7 +39,7 @@ export default async function handler(
     busboy.on('file', async (name, file, info) => {
         // 获取文件后缀
         const { filename, encoding, mimeType } = info
-        logger.info({
+        console.log({
             filename: filename,
             encoding: encoding,
             mimeType: mimeType
@@ -51,14 +51,15 @@ export default async function handler(
             'image',
             newFilename,
             file,
-            mimeType
+            'multipart/form-data'
         )
         return ResponseService.success(res, result)
     })
 
     busboy.on('error', (err: any) => {
         logger.error('文件上传失败:', err)
-        return ResponseService.error(res, 500, 'Failed to upload file')
+        return ResponseService.error(res, 500, '文件上传失败')
+        // return ResponseService.error(res, 500, 'Failed to upload file')
     })
 
     req.pipe(busboy) // 将请求管道化到 busboy 进行处理

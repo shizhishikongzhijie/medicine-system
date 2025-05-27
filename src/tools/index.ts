@@ -182,3 +182,16 @@ export function buildMenu(rawMenuData: Menus[]): MenuItem[] {
         return menuItem
     })
 }
+
+export const getBase64FromImageUrl = async (url: string): Promise<string> => {
+    const response = await fetch(url)
+    if (!response.ok) throw new Error(`Failed to fetch image from ${url}`)
+
+    const blob = await response.blob()
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(reader.result as string) // Base64
+        reader.onerror = (error) => reject(error)
+        reader.readAsDataURL(blob)
+    })
+}

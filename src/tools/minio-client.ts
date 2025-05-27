@@ -17,8 +17,7 @@ class MinioClient {
 
     constructor() {
         this.client = new Client({
-            ...minioConfig,
-            region: minioConfig.region
+            ...minioConfig
         })
     }
 

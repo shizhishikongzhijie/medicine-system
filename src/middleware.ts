@@ -153,14 +153,15 @@ export async function middleware(req: NextRequest) {
 export const config = {
     // matcher: ["/admin/:path*", "/api/:path*"], // 仅在 admin 和 API 路由执行 Middleware};
     runtime: 'nodejs',
-    matcher: [
-        '/home/:path*',
-        '/medicine/:path*',
-        '/stock/:path*',
-        '/login/:path*',
-        '/api/:path*',
-        '/auth/:path*',
-        '/log/:path*',
-        '/notification/:path*'
-    ]
+    // matcher: [
+    //     '/home/:path*',
+    //     '/medicine/:path*',
+    //     '/stock/:path*',
+    //     '/login/:path*',
+    //     '/api/:path*',
+    //     '/auth/:path*',
+    //     '/log/:path*',
+    //     '/notification/:path*'
+    // ]
+    matcher: ['/((?!_next/static|_next/image|favicon.ico|serviceWorker).*)']
 }

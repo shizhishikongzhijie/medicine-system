@@ -7,6 +7,8 @@ interface Districts {
 }
 
 interface User {
+    key?: number
+    avatar_path: string
     id: number
     username: string
     password: string

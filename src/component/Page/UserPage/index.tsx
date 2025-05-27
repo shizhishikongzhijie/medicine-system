@@ -2,11 +2,14 @@
 import './index.css'
 
 import { Button, Image, Input, Table } from '@douyinfe/semi-ui'
+import { Workbook } from 'exceljs'
+import { saveAs } from 'file-saver'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
+import { UserUploadForm } from '@/component'
 import type { UserInfo } from '@/component/Page/LoginPage/type'
-import type { Medicine } from '@/component/Page/MedicinePage/type'
-import { UTCFormat } from '@/tools'
+import type { User } from '@/component/userInfoAddition/type'
+import { getBase64FromImageUrl, UTCFormat } from '@/tools'
 import { NextAxios } from '@/tools/axios/NextAxios'
 import type { ResType } from '@/tools/axios/type'
 
@@ -26,7 +29,7 @@ const columns = [
         width: 200,
         dataIndex: 'avatar_path',
         render: (text: string) => {
-            return <Image width={100} height={100} src={`http://localhost:9090${text}`} alt={text} />
+            return <Image width={100} height={100} src={text} alt={text} />
         },
         ellipsis: true
     },
@@ -91,11 +94,68 @@ const UserPage = () => {
     const [index, setIndex] = useState(1)
     const [pageSize, setPageSize] = useState(5)
     const scroll = useMemo(() => ({ y: 280 }), [])
-    const MedicineUploadFormRef = useRef<{
+    const UserUploadFormRef = useRef<{
         openModal: () => void
         closeModal: () => void
-        setFormValues: (values: Medicine) => void
+        setFormValues: (values: User) => void
     }>()
+    //  浏览器环境下的 Excel 导出函数
+    const generateExcel = async () => {
+        const workbook = new Workbook()
+        const worksheet = workbook.addWorksheet('User')
+
+        // 添加标题行
+        worksheet.addRow(['用户名', '头像', '住址'])
+
+        let rowIdx = 2 // 数据从第2行开始
+
+        for (const item of dataSource) {
+            try {
+                const base64 = await getBase64FromImageUrl(item.avatar_path)
+
+                // 添加一行数据（头像列暂时留空）
+                worksheet.addRow([item.username, '', item.address])
+
+                // 添加图片到工作簿
+                const imageId = workbook.addImage({
+                    base64: base64,
+                    extension: 'png'
+                })
+
+                // 插入图片到指定位置
+                worksheet.addImage(imageId, {
+                    tl: { col: 1, row: rowIdx - 1 }, // 图片左上角定位在第2列（B列）、当前行
+                    ext: { width: 100, height: 100 } // 图片尺寸
+                })
+            } catch (error) {
+                console.error(
+                    `Error converting image for user ${item.username}:`,
+                    error
+                )
+
+                // 插入数据行，头像列为 'N/A'
+                worksheet.addRow([item.username, 'N/A', item.address])
+            }
+
+            rowIdx++
+        }
+
+        // 设置列宽
+        worksheet.columns = [
+            { key: 'username', width: 15 },
+            { key: 'avatar', width: 15 },
+            { key: 'address', width: 30 }
+        ]
+
+        // 生成 Blob 并触发下载
+        const buffer = await workbook.xlsx.writeBuffer() //  使用 writeBuffer 生成 Blob
+        const blob = new Blob([buffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+        saveAs(blob, 'User.xlsx') //  使用 file-saver 保存
+        console.log('Excel 文件已生成')
+    }
+
     const getData = useCallback(() => {
         const fetchData = async () => {
             const res: ResType = await NextAxios({
@@ -123,17 +183,23 @@ const UserPage = () => {
     useEffect(() => {
         getData()
     }, [index, pageSize])
+    const onUpdate = () => {
+        const id = selectedRowKeys?.[0] as number
+        UserUploadFormRef?.current?.setFormValues(
+            dataSource.find((item: User) => item.key === id) as User
+        )
+        setLoading(true)
+        getData()
+    }
     return (
         <>
+            <UserUploadForm ref={UserUploadFormRef} />
             <div className={'user-table-header'}>
                 <div className={'user-table-header__left'}>
                     <Button
                         onClick={() => {
-                            console.log(
-                                'MedicineUploadFormRef',
-                                MedicineUploadFormRef
-                            )
-                            MedicineUploadFormRef?.current?.openModal()
+                            console.log('UserUploadFormRef', UserUploadFormRef)
+                            UserUploadFormRef?.current?.openModal()
                         }}
                     >
                         导入
@@ -145,9 +211,13 @@ const UserPage = () => {
                     >
                         删除
                     </Button>
-                    <Button disabled={selectedRowKeys?.length != 1}>
+                    <Button
+                        disabled={selectedRowKeys?.length != 1}
+                        onClick={onUpdate}
+                    >
                         更新
                     </Button>
+                    <Button onClick={generateExcel}>导出</Button>
                 </div>
                 <div className={'user-table-header__right'}>
                     <Input
