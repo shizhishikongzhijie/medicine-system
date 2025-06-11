@@ -65,7 +65,6 @@ Next.js 14 | TypeScript 5 | Redux Toolkit | Semi Design | MySQL | Redis | Axios 
 2. 配置数据库
    使用  MySQL 创建数据库 `medicine` （导入 `medicine.sql` 创建表）
 
-
 3. 配置环境变量
    cp .env.example .env.local
    `.env.local` 配置示例：
