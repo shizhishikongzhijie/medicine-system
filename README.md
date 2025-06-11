@@ -1,7 +1,5 @@
 # 药品管理系统
 
-![Semi Design 风格](https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/semi-bg.jpg)
-
 ## 项目简介
 
 基于 Next.js 14 构建的现代药品管理系统，集成以下核心功能：
@@ -20,7 +18,7 @@ Next.js 14 | TypeScript 5 | Redux Toolkit | Semi Design | MySQL | Redis | Axios 
 
 ### 系统架构
 
-![架构图](https://via.placeholder.com/800x400.png/007ACC/fff?text=System+Architecture)
+![架构图](./系统架构图.drawio.png)
 
 ### 核心模块
 
@@ -64,16 +62,51 @@ Next.js 14 | TypeScript 5 | Redux Toolkit | Semi Design | MySQL | Redis | Axios 
       npm install
    ```
 
-2. 配置环境变量
+2. 配置数据库
+   使用  MySQL 创建数据库 `medicine` （导入 `medicine.sql` 创建表）
+
+
+3. 配置环境变量
    cp .env.example .env.local
    `.env.local` 配置示例：
 ```ini
-   DATABASE_URL=mysql://user:pass@localhost:3306/med_system
-   REDIS_URL=redis://localhost:6379
-   JWT_SECRET=your_secure_secret
-   NEXTAUTH_URL=http://localhost:3000
-```
+# node env
+NODE_ENV=development
 
+# mysql
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=123456
+MYSQL_DATABASE=medicine
+
+# redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=123456
+REDIS_DB=2
+REDIS_CONNECT_TIMEOUT=5000
+
+# minio
+MINIO_ENDPOINT=localhost
+MINIO_PORT=9008
+MINIO_USE_SSL=false
+MINIO_ACCESS_KEY=username
+MINIO_SECRET_KEY=123456
+MINIO_REGION=cn-west-rack-1
+
+# jwt
+JWT_SECRET_KEY=123456
+
+# Cookies
+# 访问令牌过期时间, 单位为秒, 这里设置为1h
+EXPIRATION_TIME_ACCESS_TOKEN=3600
+# 刷新令牌过期时间, 单位为秒, 这里设置为7天
+EXPIRATION_TIME_REFRESH_TOKEN=604800
+
+# URL
+BASE_URL=http://localhost:3000
+```
 
 ### 开发运行
 

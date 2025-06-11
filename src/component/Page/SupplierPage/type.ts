@@ -1,4 +1,5 @@
 interface Supplier {
+    key?: number
     id: number
     name: string
     contact_person: string

@@ -48,7 +48,13 @@ export default async function RootLayout({
     const token = tokenCookies?.value // 提取第一个 Cookie 的 value
     logger.info('cookie:', { token: token })
     let menus: Menus[] | undefined = undefined
-    let user: UserTokenType
+    let user: UserTokenType = {
+        id: 0,
+        username: '',
+        role_id: 0,
+        iat: 0,
+        exp: 0
+    }
     if (token && !jwtService.isTokenExpired(token)) {
         try {
             user = jwtService.verifyToken(token) // 验证 Token

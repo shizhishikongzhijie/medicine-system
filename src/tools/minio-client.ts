@@ -53,7 +53,7 @@ class MinioClient {
             )
 
             return this.getObjectUrl(bucketName, objectName)
-        } catch (error) {
+        } catch (error:any) {
             throw new Error(`文件上传失败: ${error.message}`)
         }
     }
@@ -81,7 +81,7 @@ class MinioClient {
                 objectName,
                 expiry
             )
-        } catch (error) {
+        } catch (error:any) {
             throw new Error(`生成预签名URL失败: ${error.message}`)
         }
     }
@@ -99,7 +99,7 @@ class MinioClient {
     async deleteFile(bucketName: string, objectName: string): Promise<void> {
         try {
             await this.client.removeObject(bucketName, objectName)
-        } catch (error) {
+        } catch (error:any) {
             throw new Error(`文件删除失败: ${error.message}`)
         }
     }
@@ -120,7 +120,7 @@ class MinioClient {
             const objects: string[] = []
             const stream = this.client.listObjects(bucketName, prefix, true)
 
-            stream.on('data', (obj) => objects.push(obj.name))
+            stream.on('data', (obj:any) => objects.push(obj.name))
             stream.on('end', () => resolve(objects))
             stream.on('error', (error) => reject(error))
         })
@@ -154,7 +154,7 @@ class MinioClient {
             if (!exists) {
                 await this.client.makeBucket(bucketName, minioConfig.region)
             }
-        } catch (error) {
+        } catch (error:any) {
             throw new Error(`创建存储桶失败: ${error.message}`)
         }
     }

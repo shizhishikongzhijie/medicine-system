@@ -1,13 +1,6 @@
 'use client'
 import { IconCamera } from '@douyinfe/semi-icons'
-import {
-    Avatar,
-    Form,
-    Modal,
-    Notification,
-    Toast,
-    Upload
-} from '@douyinfe/semi-ui'
+import { Avatar, Form, Modal, Notification, Toast, Upload } from '@douyinfe/semi-ui'
 import type { FormApi } from '@douyinfe/semi-ui/lib/es/form'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 
@@ -101,7 +94,7 @@ const UserUploadForm = forwardRef((props: UserUploadFormProps, ref) => {
     const api = 'http://localhost:3000/api/upload/image'
     const imageOnly = 'image/*'
 
-    const onSuccess = (response, file) => {
+    const onSuccess = (response:any, file:any) => {
         console.log(response, file)
         Toast.success('头像更新成功')
         setUrl(response.message)

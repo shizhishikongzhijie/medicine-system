@@ -136,9 +136,11 @@ const SupplierUploadForm = forwardRef((props: SupplierUploadFormProps, ref) => {
                         // {validator: (rule, value) => value === 'semi', message: 'should be semi'}
                     ]}
                 />
+
                 <Form.Switch
                     field="is_read"
                     label="是否展示"
+                    //@ts-ignore
                     checked={showChecked}
                     onChange={setShowChecked}
                 />

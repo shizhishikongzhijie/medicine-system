@@ -24,7 +24,7 @@ export async function middleware(req: NextRequest) {
     // 从请求的 URL 中解构出路径名、查询参数、原始 URL 和基础路径
     //const {pathname, search, origin, basePath} = req.nextUrl;
     // 打印客户端 IP 地址和请求 URL，用于调试和日志记录
-    console.info({ clientIp: clientIp, reqUrl: req.url })
+    // console.info({ clientIp: clientIp, reqUrl: req.url })
 
     if (req.url.includes('/api/redis') || req.url.includes('/api/jwt')) {
         // 检查 IP 是否在白名单中
@@ -123,36 +123,29 @@ export async function middleware(req: NextRequest) {
         })
     }
     const duration = (Date.now() - start) / 1000
-    if (
-        req.nextUrl.pathname !== '/api/httpHistogram' &&
-        req.nextUrl.pathname !== '/api/metrics'
-    ) {
-        await MiddleAxios({
-            url: url + '/api/httpHistogram',
-            map: 'post',
-            data: {
-                method: req.method,
-                route: req.nextUrl.pathname,
-                status: res.status.toString(),
-                duration: duration
-            }
-        })
-    }
-
-    // httpRequestDurationMicroseconds
-    //     .labels({
-    //         method: req.method,
-    //         route: req.nextUrl.pathname,
-    //         status: res.status.toString()
+    // if (
+    //     req.nextUrl.pathname !== '/api/httpHistogram' &&
+    //     req.nextUrl.pathname !== '/api/metrics'
+    // ) {
+    //     await MiddleAxios({
+    //         url: url + '/api/httpHistogram',
+    //         map: 'post',
+    //         data: {
+    //             method: req.method,
+    //             route: req.nextUrl.pathname,
+    //             status: res.status.toString(),
+    //             duration: duration
+    //         }
     //     })
-    //     .observe(duration)
+    // }
+
     return res
 }
 
 // 导出中间件的配置对象，用于指定中间件应用的路径匹配规则
 export const config = {
     // matcher: ["/admin/:path*", "/api/:path*"], // 仅在 admin 和 API 路由执行 Middleware};
-    runtime: 'nodejs',
+    // runtime: 'nodejs' only NextJs@15.canny,
     // matcher: [
     //     '/home/:path*',
     //     '/medicine/:path*',

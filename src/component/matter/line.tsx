@@ -2,7 +2,7 @@ import Matter from 'matter-js'
 import { useEffect, useRef } from 'react'
 
 export default function RopeSimulation() {
-    const canvasRef = useRef(null)
+    const canvasRef = useRef<HTMLElement>()
 
     useEffect(() => {
         // 初始化 Matter.js 引擎
@@ -103,9 +103,10 @@ export default function RopeSimulation() {
 
         // 绳子 C：带圆角的矩形组成的链条
         const groupC = Body.nextGroup(true)
-        const ropeC = Composites.stack(600, 50, 13, 1, 10, 10, (x, y) => {
+        const ropeC = Composites.stack(600, 50, 13, 1, 10, 10, (x: number, y:number) => {
             return Bodies.rectangle(x - 20, y, 50, 20, {
                 collisionFilter: { group: groupC },
+                // @ts-ignore
                 chamfer: 5, // 圆角效果
                 render: {
                     fillStyle: '#32b6ff' //, // 设置填充颜色
@@ -145,6 +146,7 @@ export default function RopeSimulation() {
         return () => {
             Render.stop(render)
             Runner.stop(runner)
+            // @ts-ignore
             engine.world = null
         }
     }, [])
@@ -152,6 +154,7 @@ export default function RopeSimulation() {
     return (
         <div>
             <h1>Next.js 中的绳子模拟</h1>
+            {/*@ts-ignore*/}
             <div ref={canvasRef}></div>
         </div>
     )

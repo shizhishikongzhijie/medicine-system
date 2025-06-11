@@ -3,7 +3,7 @@
 import { Divider, Skeleton } from '@douyinfe/semi-ui'
 import { useEffect, useState } from 'react'
 
-import { LineChart, PerformanceCard, PieChart } from '@/component'
+import { LineChart, PieChart } from '@/component'
 import { NextAxios } from '@/tools/axios/NextAxios'
 import type { ResType } from '@/tools/axios/type'
 
@@ -49,7 +49,7 @@ const HomePage = () => {
 
     return (
         <div>
-            <PerformanceCard />
+            {/*<PerformanceCard />*/}
             {/*<Skeleton*/}
             {/*    active*/}
             {/*    placeholder={placeholder}*/}

@@ -196,14 +196,14 @@ const UserPage = () => {
             <UserUploadForm ref={UserUploadFormRef} />
             <div className={'user-table-header'}>
                 <div className={'user-table-header__left'}>
-                    <Button
-                        onClick={() => {
-                            console.log('UserUploadFormRef', UserUploadFormRef)
-                            UserUploadFormRef?.current?.openModal()
-                        }}
-                    >
-                        导入
-                    </Button>
+                    {/*<Button*/}
+                    {/*    onClick={() => {*/}
+                    {/*        console.log('UserUploadFormRef', UserUploadFormRef)*/}
+                    {/*        UserUploadFormRef?.current?.openModal()*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    导入*/}
+                    {/*</Button>*/}
                     <Button
                         disabled={
                             !(selectedRowKeys && selectedRowKeys?.length > 0)

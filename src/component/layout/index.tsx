@@ -1,25 +1,13 @@
 'use client'
 import { IconBell, IconHelpCircle, IconSemiLogo } from '@douyinfe/semi-icons'
-import {
-    Avatar,
-    Badge,
-    Breadcrumb,
-    Button,
-    Layout,
-    Nav,
-    Popover
-} from '@douyinfe/semi-ui'
+import { Avatar, Badge, Breadcrumb, Button, Layout, Nav, Popover } from '@douyinfe/semi-ui'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { NotificationPopover, ThemeButton } from '@/component'
-import type {
-    InitNavItems,
-    LayoutProps,
-    Notification
-} from '@/component/layout/type'
+import type { InitNavItems, LayoutProps, Notification } from '@/component/layout/type'
 import { BREADCRUMB_MAP, INIT_NAV_ITEMS, ROUTER_MAP } from '@/config'
 import { updateUserData } from '@/reducer/userSlice'
 import type { AppDispatch } from '@/store'
@@ -112,6 +100,35 @@ const CustomLayout: React.FC<LayoutProps> = ({ children, menus, user }) => {
             }
         })
     }
+    // useEffect(() => {
+    //     const prefetchLinks = () => {
+    //         const paths = [
+    //             '/medicine/medicine',
+    //             '/medicine/stock',
+    //             '/medicine/supplier',
+    //             '/user',
+    //             '/role/role',
+    //             '/role/permission',
+    //             '/notification',
+    //             '/log',
+    //             '/setting',
+    //             '/menu'
+    //         ];
+    //
+    //         paths.forEach(path => {
+    //             const link = document.createElement('link');
+    //             link.rel = 'prefetch';
+    //             link.href = path;
+    //             document.head.appendChild(link);
+    //         });
+    //     };
+    //
+    //     window.addEventListener('load', prefetchLinks);
+    //
+    //     return () => {
+    //         window.removeEventListener('load', prefetchLinks);
+    //     };
+    // }, []);
 
     return (
         <Layout
@@ -120,6 +137,16 @@ const CustomLayout: React.FC<LayoutProps> = ({ children, menus, user }) => {
                 height: '100%'
             }}
         >
+            {/*<link rel="prefetch" href="/medicine/medicine" />*/}
+            {/*<link rel="prefetch" href="/medicine/stock" />*/}
+            {/*<link rel="prefetch" href="/medicine/supplier" />*/}
+            {/*<link rel="prefetch" href="/user" />*/}
+            {/*<link rel="prefetch" href="/role/role" />*/}
+            {/*<link rel="prefetch" href="/role/permission" />*/}
+            {/*<link rel="prefetch" href="/notification" />*/}
+            {/*<link rel="prefetch" href="/log" />*/}
+            {/*<link rel="prefetch" href="/setting" />*/}
+            {/*<link rel="prefetch" href="/menu"/>*/}
             <Header style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>
                 <Nav mode="horizontal" defaultSelectedKeys={['Home']}>
                     <Nav.Header>
@@ -233,6 +260,7 @@ const CustomLayout: React.FC<LayoutProps> = ({ children, menus, user }) => {
                                                     props.itemKey as keyof typeof ROUTER_MAP
                                                 ]
                                             }
+                                            prefetch
                                         >
                                             {itemElement}
                                         </Link>

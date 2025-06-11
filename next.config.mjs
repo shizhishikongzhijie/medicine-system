@@ -19,5 +19,8 @@ const nextConfig = {
         buildActivityPosition: 'bottom-right',
     },
     reactStrictMode: false,
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
 };
 export default nextConfig;

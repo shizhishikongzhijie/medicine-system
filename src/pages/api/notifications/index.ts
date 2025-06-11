@@ -69,7 +69,7 @@ const getNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
                                    FROM notifications
                                    WHERE is_read = ?`
                     let [result]: any[] = await pool.query(query, [isReadNum])
-                    result = result.map((item) => {
+                    result = result.map((item:NotificationUser) => {
                         return {
                             ...item,
                             has_read:
@@ -83,7 +83,7 @@ const getNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
                                    FROM notifications
                                    WHERE is_read = ?`
                     let [result]: any[] = await pool.query(query, isReadNum)
-                    result = result.map((item) => {
+                    result = result.map((item:NotificationUser) => {
                         return {
                             ...item,
                             has_read: true
@@ -128,7 +128,7 @@ const getNotifications = async (req: NextApiRequest, res: NextApiResponse) => {
             }
             return ResponseService.success(res, '查询成功', {
                 count: countResult[0].count,
-                data: dataResult.map((item) => {
+                data: dataResult.map((item:NotificationUser) => {
                     return {
                         ...item,
                         has_read: redisResult && !redisResult.includes(item.id)

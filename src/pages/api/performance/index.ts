@@ -12,7 +12,7 @@ export default async function handler(
 ) {
     try {
         // 获取 CPU 和内存使用情况的数据
-        const [cpuData, memoryData, diskIoData, osData] = await Promise.all([
+        const [cpuData, memoryData, diskIoData ] = await Promise.all([
             si.currentLoad(), // 获取当前 CPU 负载
             si.mem(), // 获取内存使用情况
             si.disksIO() // 获取磁盘 I/O 使用情况

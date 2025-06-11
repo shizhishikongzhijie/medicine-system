@@ -2,8 +2,6 @@
 import { Descriptions, Popover } from '@douyinfe/semi-ui'
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useState } from 'react'
-
-import type { Medicine } from '@/component/Page/MedicinePage/type'
 import type { Supplier } from '@/component/Page/SupplierPage/type'
 import { UTCFormat } from '@/tools'
 import { NextAxios } from '@/tools/axios/NextAxios'
@@ -12,7 +10,7 @@ import type { ResType } from '@/tools/axios/type'
 const SupplierPopover = (props: {
     supplierId?: number
     children: ReactNode
-    initialValue?: Medicine
+    initialValue?: Supplier
 }) => {
     const { supplierId, children, initialValue } = props
     const [supplier, setSupplier] = useState<Supplier>(initialValue as Supplier)

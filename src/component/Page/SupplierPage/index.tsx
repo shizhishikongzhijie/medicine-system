@@ -117,7 +117,7 @@ const SupplierPage = () => {
         const names =
             selectedRowKeys?.map((id: any) => {
                 const item: Supplier | undefined = dataSource.find(
-                    (item: Supplier) => item.key === id
+                    (item: Supplier) => item?.key === id
                 )
                 return item?.name
             }) ?? [] // 处理 selectedRowKeys 为 null/undefined 的情况

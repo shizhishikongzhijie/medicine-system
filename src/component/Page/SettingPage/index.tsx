@@ -1,22 +1,7 @@
 'use client'
 import { IconCamera, IconUpload } from '@douyinfe/semi-icons'
-import {
-    Avatar,
-    Button,
-    Cropper,
-    Form,
-    Modal,
-    TabPane,
-    Tabs,
-    Upload
-} from '@douyinfe/semi-ui'
-import {
-    forwardRef,
-    useCallback,
-    useImperativeHandle,
-    useRef,
-    useState
-} from 'react'
+import { Avatar, Button, Cropper, Form, Modal, TabPane, Tabs, Upload } from '@douyinfe/semi-ui'
+import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react'
 
 const SettingPage = () => {
     const cropperBoxRef = useRef<any>(null)
@@ -115,7 +100,16 @@ const CropperBox = forwardRef((props, ref) => {
         setCropperUrl(url)
     }, [])
     const preview = useCallback(() => {
-        return document.getElementById('previewWrapper')
+        const element = document.getElementById('previewWrapper')
+        // 添加非空判断，防止返回 null
+        if (!element) {
+            // 可创建一个临时 div 作为兜底方案
+            const tempDiv = document.createElement('div')
+            tempDiv.id = 'previewWrapper'
+            document.body.appendChild(tempDiv)
+            return tempDiv
+        }
+        return element
     }, [])
     useImperativeHandle(ref, () => ({
         openModal: () => {
@@ -161,6 +155,7 @@ const CropperBox = forwardRef((props, ref) => {
                     }}
                 ></div>
             </div>
+            {/*@ts-ignore*/}
             <Form layout="horizontal">
                 <Form.Input
                     noLabel

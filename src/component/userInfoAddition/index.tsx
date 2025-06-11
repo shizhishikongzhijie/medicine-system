@@ -23,6 +23,7 @@ const UserInfoAddition = forwardRef((props: UserInfoAdditionProps, ref) => {
         'default'
     )
     const [userInfo, setUserInfo] = useState<User>({
+        avatar_path: "", key: undefined,
         address_code: '',
         birth_date: '',
         created_at: '',
